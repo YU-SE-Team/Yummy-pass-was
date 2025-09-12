@@ -1,6 +1,6 @@
-# SW-nuclear-fusion
+# meal-ticket-system-was
 
-스마트 시니어 케어 프로토타입 프로젝트
+컴퓨터공학과 3학년 소프트웨어공학 프로젝트
 
 ## 기술 스택
 
