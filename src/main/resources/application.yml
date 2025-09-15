@@ -7,10 +7,12 @@ spring:
     url: jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:test}
     username: ${DATABASE_USER:root}
     password: ${DATABASE_PASS:password}
-
+    
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+    defer-datasource-initialization: true
 
   jwt:
     secret: ${JWT_KEY:vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb}
@@ -66,3 +68,4 @@ spring:
             token-uri: https://oauth2.googleapis.com/token
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
+
