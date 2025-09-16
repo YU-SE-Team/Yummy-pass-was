@@ -21,6 +21,8 @@ public class Menu {
     private int totalCount;
     private int soldTicket;
     private String category;
+    private Boolean visible = true;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
