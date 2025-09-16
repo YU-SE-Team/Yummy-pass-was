@@ -1,6 +1,7 @@
 package yuseteam.mealticketsystemwas.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +33,7 @@ public class Menu {
 
     @OneToMany(mappedBy = "menu")
     private List<Ticket> tickets;
+
+
 
 }
