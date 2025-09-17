@@ -75,7 +75,7 @@ public class SecurityConfig {
                         .successHandler(customSuccessHandler)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/auth/signin", "/auth/signup",
+                        .requestMatchers("/", "/api/auth/signin", "/api/auth/signup",
                                 "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/webjars/**", "/error").permitAll()
                         .anyRequest().authenticated()
