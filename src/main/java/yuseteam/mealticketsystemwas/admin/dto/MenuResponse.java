@@ -1,0 +1,35 @@
+package yuseteam.mealticketsystemwas.admin.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Builder;
+import yuseteam.mealticketsystemwas.entity.Menu;
+
+@Getter
+@Builder
+@AllArgsConstructor
+public class MenuResponse {
+    private final Long id;
+    private final String name;
+    private final String photoUrl;
+    private final int price;
+    private final int totalCount;
+    private final int soldTicket;
+    private final String category;
+    private final Boolean visible;
+    private final String restaurantName;
+
+    public static MenuResponse from(Menu menu) {
+        return MenuResponse.builder()
+                .id(menu.getId())
+                .name(menu.getName())
+                .photoUrl(menu.getPhotoUrl())
+                .price(menu.getPrice())
+                .totalCount(menu.getTotalCount())
+                .soldTicket(menu.getSoldTicket())
+                .category(menu.getCategory())
+                .visible(menu.getVisible())
+                .restaurantName(menu.getRestaurant().getName())
+                .build();
+    }
+}
