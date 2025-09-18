@@ -6,7 +6,7 @@
 
 - Frontend: React
 - Backend: Spring boot
-- DB: MySQL
+- DB: MySQL, S3
 
 ## 브랜치 전략
 
