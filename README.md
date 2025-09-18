@@ -2,6 +2,14 @@
 
 컴퓨터공학과 3학년 소프트웨어공학 프로젝트
 
+## 팀원
+
+| BE | BE | BE | FE | FE | FE |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| <img src="https://avatars.githubusercontent.com/u/78362785?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/165614132?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/135015634?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/84222311?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/165547330?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/180498060?v=4" width="150" height="150"/> |
+| [@Silverblond](https://github.com/Silverblond)<br>김동균 | [@chamigyeong00](https://github.com/chamingyeong00)<br>차민경 | [@hansubsub](https://github.com/hansubsub)<br>한수빈 | [@ehddbs730](https://github.com/ehddbs730)<br>강동윤 | [@na-yeonKim](https://github.com/na-yeonKim)<br>김나연 | [@ye0n5u](https://github.com/ye0n5u)<br>이연수 |
+
+
 ## 기술 스택
 
 - Frontend: React
