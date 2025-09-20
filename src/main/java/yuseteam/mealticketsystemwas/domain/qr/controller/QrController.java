@@ -2,70 +2,85 @@ package yuseteam.mealticketsystemwas.domain.qr.controller;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import yuseteam.mealticketsystemwas.domain.qr.service.S3Service;
 
-import java.io.FileOutputStream;
-import java.util.Map;
+import java.io.ByteArrayOutputStream;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api")
+@RequestMapping("/api/qr")
 public class QrController {
-    private static final Map<String, Boolean> qrUsageMap = new ConcurrentHashMap<>();
 
-    @GetMapping("/qr")
-    public ResponseEntity<String> createMealTicketQr() throws WriterException {
+    private final S3Service s3;
 
-        int width = 200;
-        int height = 200;
-        String url = "https://naver.com";
-        String uuid = UUID.randomUUID().toString();
-        String filePath = "qr-code-" + uuid + ".png";
-
-        BitMatrix encode = new MultiFormatWriter()
-                .encode(url + "?uuid=" + uuid, BarcodeFormat.QR_CODE, width, height);
-
+    @PostMapping()
+    public ResponseEntity<String> createMealTicketQr() {
         try {
-            FileOutputStream out = new FileOutputStream(filePath);
-            MatrixToImageWriter.writeToStream(encode, "PNG", out);
-            out.close();
-            qrUsageMap.put(uuid, false);
-            return ResponseEntity.ok("QR 코드가 파일로 저장되었습니다: " + filePath + "\nUUID: " + uuid);
+            String uuid = UUID.randomUUID().toString();
+            String contents = "https://localhost:8080/api/qr/use?uuid=" + uuid; // 서버 배포 후 수정 필요
+
+            int width = 200;
+            int height = 200;
+            BitMatrix matrix = new MultiFormatWriter()
+                    .encode(contents, BarcodeFormat.QR_CODE, width, height);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            MatrixToImageWriter.writeToStream(matrix, "PNG", baos);
+            byte[] pngBytes = baos.toByteArray();
+
+            String imgKey = s3.imageKey(uuid);
+            String imageUrl = s3.uploadImageBytes(pngBytes, imgKey, MediaType.IMAGE_PNG_VALUE);
+
+            s3.saveQrStatus(uuid, false);
+
+            String body = """
+                    QR 업로드 완료
+                    uuid: %s
+                    imageUrl: %s
+                    """.formatted(uuid, imageUrl);
+            return ResponseEntity.ok(body);
+
         } catch (Exception e) {
-            log.warn("QR Code 파일 저장 도중 Exception 발생, {}", e.getMessage());
+            log.error("QR 생성 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("QR 생성/업로드 실패: " + e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("QR 코드 파일 저장 실패");
     }
 
-    @GetMapping("/qr/use")
+    @PostMapping("/use")
     public ResponseEntity<String> useQr(@RequestParam String uuid) {
-        Boolean used = qrUsageMap.get(uuid);
+        Boolean used = s3.getQrStatus(uuid);
         if (used == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 QR입니다.");
         }
         if (used) {
             return ResponseEntity.ok("이미 사용된 QR입니다.");
         }
-        qrUsageMap.put(uuid, true);
-        return ResponseEntity.ok("QR 사용 성공");
+
+        s3.saveQrStatus(uuid, true);
+
+        try {
+            s3.deleteObject(s3.imageKey(uuid));
+        } catch (Exception e) {
+            log.warn("QR 이미지 삭제 실패 : {}", e.getMessage());
+        }
+
+        return ResponseEntity.ok("QR 사용 성공 (uuid=" + uuid + ")");
     }
 
-    @GetMapping("/qr/info")
+    @GetMapping("/info")
     public ResponseEntity<String> getQrInfo(@RequestParam String uuid) {
-        Boolean used = qrUsageMap.get(uuid);
+        Boolean used = s3.getQrStatus(uuid);
         if (used == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 QR입니다.");
         }

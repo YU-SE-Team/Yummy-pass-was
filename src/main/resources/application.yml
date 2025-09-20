@@ -69,3 +69,13 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
 
+  cloud:
+    aws:
+      credentials:
+        access-key: ${SEVER-ACCESS-KEY}
+        secret-key: ${SEVER-SECRET-KEY}
+      region:
+        static: us-east-1
+      s3:
+        bucket: ${S3-BUCKET-NAME}
+
