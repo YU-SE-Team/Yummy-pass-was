@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import yuseteam.mealticketsystemwas.domain.admin.dto.MenuResponse;
 import yuseteam.mealticketsystemwas.domain.admin.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.restaurant.dto.MenuResponseDto;
-import yuseteam.mealticketsystemwas.domain.restaurant.service.MenuService;
+
+import yuseteam.mealticketsystemwas.domain.restaurant.service.UserMenuService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class MenuController {
+public class UserMenuController {
 
-    private final MenuService menuService;
+    private final UserMenuService menuService;
 
-    @GetMapping("/{restaurantId}/{category}/menus")
+    @GetMapping("/menus/{restaurantId}/{category}")
     public ResponseEntity<List<MenuResponseDto>> getMenus(
             @PathVariable Long restaurantId,
             @PathVariable String category) {

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class MenuService {
+public class UserMenuService {
 
     private final MenuRepository menuRepository;
 
