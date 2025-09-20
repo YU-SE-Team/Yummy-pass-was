@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import yuseteam.mealticketsystemwas.domain.admin.dto.MenuCreateRequest;
 import yuseteam.mealticketsystemwas.domain.admin.dto.MenuCreateResponse;
+import yuseteam.mealticketsystemwas.domain.admin.dto.MenuDetailResponseDto;
 import yuseteam.mealticketsystemwas.domain.admin.dto.MenuResponse;
 import yuseteam.mealticketsystemwas.domain.admin.service.MenuService;
 
@@ -34,5 +35,13 @@ public class MenuController {
     @GetMapping("/menu")
     public ResponseEntity<List<MenuResponse>> getMenus(){
         return ResponseEntity.ok(menuService.getMenus());
+    }
+
+    //---------------------------------------------------------------------------------
+
+    @GetMapping("/{menuId}")
+    public ResponseEntity<MenuDetailResponseDto> getMenuDetails(@PathVariable Long menuId){
+        MenuDetailResponseDto menuDetail = menuService.getMenuDetails(menuId);
+        return ResponseEntity.ok(menuDetail);
     }
 }
