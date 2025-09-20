@@ -75,7 +75,7 @@ spring:
         access-key: ${SEVER-ACCESS-KEY}
         secret-key: ${SEVER-SECRET-KEY}
       region:
-        static: us-east-1
+        static: ap-northeast-2
       s3:
         bucket: ${S3-BUCKET-NAME}
 
