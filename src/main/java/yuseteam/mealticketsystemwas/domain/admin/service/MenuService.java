@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yuseteam.mealticketsystemwas.domain.admin.dto.MenuCreateRequest;
 import yuseteam.mealticketsystemwas.domain.admin.dto.MenuCreateResponse;
+import yuseteam.mealticketsystemwas.domain.admin.dto.MenuDetailResponseDto;
 import yuseteam.mealticketsystemwas.domain.admin.dto.MenuResponse;
 import yuseteam.mealticketsystemwas.domain.admin.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
@@ -53,5 +54,13 @@ public class MenuService {
                 .stream()
                 .map(MenuResponse::from)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public MenuDetailResponseDto getMenuDetails(Long menuId) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 메뉴를 찾을 수 없습니다. id=" + menuId));
+
+        return new MenuDetailResponseDto(menu);
     }
 }
