@@ -76,7 +76,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         //.requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/", "/api/auth/signin", "/api/auth/signup",
+                        .requestMatchers("/", "/api/auth/signin", "/api/auth/signup", "/api/menus/**",
                                 "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/webjars/**", "/error",
                                 "/api/admin/**").permitAll() //지금 임시로 열어두는것, 나중에 지우고 위에것으로 사용할 것.
