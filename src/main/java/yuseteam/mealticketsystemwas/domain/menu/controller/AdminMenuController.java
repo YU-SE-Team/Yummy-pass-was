@@ -1,27 +1,26 @@
-package yuseteam.mealticketsystemwas.domain.admin.controller;
+package yuseteam.mealticketsystemwas.domain.menu.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import yuseteam.mealticketsystemwas.domain.admin.dto.MenuCreateRequest;
-import yuseteam.mealticketsystemwas.domain.admin.dto.MenuCreateResponse;
-import yuseteam.mealticketsystemwas.domain.admin.dto.MenuDetailResponseDto;
-import yuseteam.mealticketsystemwas.domain.admin.dto.MenuResponse;
-import yuseteam.mealticketsystemwas.domain.admin.service.MenuService;
+import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateResponse;
+import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuResponse;
+import yuseteam.mealticketsystemwas.domain.menu.service.AdminMenuService;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/admin")
-public class MenuController {
-    private final MenuService menuService;
+public class AdminMenuController {
+    private final AdminMenuService menuService;
 
     //메뉴 등록
     @PostMapping("/menu")
-    public ResponseEntity<MenuCreateResponse> createMenu(@Valid @RequestBody MenuCreateRequest req) {
-        MenuCreateResponse created = menuService.createMenu(req);
+    public ResponseEntity<AdminMenuCreateResponse> createMenu(@Valid @RequestBody AdminMenuCreateRequest req) {
+        AdminMenuCreateResponse created = menuService.createMenu(req);
         return ResponseEntity.ok(created);
     }
 
@@ -33,15 +32,7 @@ public class MenuController {
     }
     //메뉴 조회
     @GetMapping("/menu")
-    public ResponseEntity<List<MenuResponse>> getMenus(){
+    public ResponseEntity<List<AdminMenuResponse>> getMenus(){
         return ResponseEntity.ok(menuService.getMenus());
-    }
-
-    //---------------------------------------------------------------------------------
-
-    @GetMapping("/{menuId}")
-    public ResponseEntity<MenuDetailResponseDto> getMenuDetails(@PathVariable Long menuId){
-        MenuDetailResponseDto menuDetail = menuService.getMenuDetails(menuId);
-        return ResponseEntity.ok(menuDetail);
     }
 }

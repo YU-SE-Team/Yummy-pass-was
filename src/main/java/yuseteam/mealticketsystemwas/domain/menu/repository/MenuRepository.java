@@ -1,7 +1,7 @@
-package yuseteam.mealticketsystemwas.domain.admin.repository;
+package yuseteam.mealticketsystemwas.domain.menu.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import yuseteam.mealticketsystemwas.domain.admin.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 
 import java.util.List;
 

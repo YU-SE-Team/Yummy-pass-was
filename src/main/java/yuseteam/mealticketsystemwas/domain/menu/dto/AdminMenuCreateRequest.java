@@ -1,4 +1,4 @@
-package yuseteam.mealticketsystemwas.domain.admin.dto;
+package yuseteam.mealticketsystemwas.domain.menu.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MenuCreateRequest {
+public class AdminMenuCreateRequest {
 
     private Long restaurantId;
     @NotBlank

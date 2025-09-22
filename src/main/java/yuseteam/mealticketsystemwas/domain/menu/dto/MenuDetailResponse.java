@@ -1,16 +1,16 @@
-package yuseteam.mealticketsystemwas.domain.admin.dto;
+package yuseteam.mealticketsystemwas.domain.menu.dto;
 
 import lombok.Getter;
-import yuseteam.mealticketsystemwas.domain.admin.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 
 @Getter
-public class MenuDetailResponseDto {
+public class MenuDetailResponse {
     private final Long id;
     private final String name;
     private final int price;
     private final int remainingTickets;
 
-    public MenuDetailResponseDto(Menu menu) {
+    public MenuDetailResponse(Menu menu) {
         this.id = menu.getId();
         this.name = menu.getName();
         this.price = menu.getPrice();
