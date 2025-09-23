@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.SignInReqDto;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.SignInResDto;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.SignUpReqDto;
-import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.UserEntity;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.jwt.JWTService;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 
@@ -35,7 +35,7 @@ public class UserService {
 
         String encodedPw = passwordEncoder.encode(req.getUserPW());
 
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setUserId(req.getUserId());
         user.setUserPW(encodedPw);
         user.setName(req.getName());
@@ -48,7 +48,7 @@ public class UserService {
 
     @Transactional
     public SignInResDto login(SignInReqDto req) {
-        UserEntity user = userRepository.findByUserId(req.getUserId())
+        User user = userRepository.findByUserId(req.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다."));
 
         if (!passwordEncoder.matches(req.getUserPW(), user.getUserPW())) {
