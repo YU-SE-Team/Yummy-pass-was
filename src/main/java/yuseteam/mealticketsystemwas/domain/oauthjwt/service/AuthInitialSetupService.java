@@ -10,7 +10,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.RoleType;
-import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.UserEntity;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.jwt.JWTUtil;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 
@@ -37,7 +37,7 @@ public class AuthInitialSetupService {
     }
 
     @Transactional
-    public Map<String, Object> initialSetup(UserEntity req,
+    public Map<String, Object> initialSetup(User req,
                                             HttpServletRequest request,
                                             HttpServletResponse response) {
         Map<String, Object> body = new LinkedHashMap<>();
@@ -55,7 +55,7 @@ public class AuthInitialSetupService {
         }
 
         Long userId = jwtUtil.parseUserId(token);
-        UserEntity user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             body.put("error", "유저를 찾을 수 없습니다: " + userId);
             body.put("status", 400);

@@ -11,7 +11,7 @@ import yuseteam.mealticketsystemwas.domain.oauthjwt.RoleType;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class UserEntity {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

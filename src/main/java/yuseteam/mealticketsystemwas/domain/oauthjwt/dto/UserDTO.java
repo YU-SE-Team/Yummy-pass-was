@@ -13,5 +13,4 @@ public class UserDTO {
     private RoleType role;
     private String name;
     private String socialname;
-
 }

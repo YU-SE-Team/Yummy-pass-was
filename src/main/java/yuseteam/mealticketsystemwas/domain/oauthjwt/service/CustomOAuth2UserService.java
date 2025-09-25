@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.*;
-import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.UserEntity;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 
 @Transactional
@@ -44,11 +44,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         String socialname = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
-        UserEntity existData = userRepository.findBySocialname(socialname);
+        User existData = userRepository.findBySocialname(socialname);
 
         if (existData == null){
 
-            UserEntity userEntity = new UserEntity();
+            User userEntity = new User();
             userEntity.setSocialname(socialname);
             userEntity.setName(oAuth2Response.getName());
             userEntity.setRole(null);

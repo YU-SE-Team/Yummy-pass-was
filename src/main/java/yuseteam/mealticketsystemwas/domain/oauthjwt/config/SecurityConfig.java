@@ -17,6 +17,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.jwt.JWTFilter;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.jwt.JWTService;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.oauth2.CustomSuccessHandler;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.service.CustomOAuth2UserService;
 
 import java.util.Collections;
@@ -28,6 +29,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTService jwtService;
+    private final UserRepository userRepository;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -35,10 +37,11 @@ public class SecurityConfig {
                 .requestMatchers("/error");
     }
 
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler, JWTService jwtService) {
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler, JWTService jwtService, UserRepository userRepository) {
         this.customOAuth2UserService = customOAuth2UserService;
         this.customSuccessHandler = customSuccessHandler;
         this.jwtService = jwtService;
+        this.userRepository = userRepository;
     }
 
     @Bean
@@ -68,7 +71,7 @@ public class SecurityConfig {
                     }
 
                 }))
-                .addFilterBefore(new JWTFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTFilter(jwtService, userRepository), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfoEndpointConfig ->
                                 userInfoEndpointConfig.userService(customOAuth2UserService))
@@ -78,7 +81,7 @@ public class SecurityConfig {
                         //.requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/", "/api/auth/signin", "/api/auth/signup", "/api/menus/**",
                                 "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**",
-                                "/webjars/**", "/error","/api/restaurants","/api/qr/**",
+                                "/webjars/**", "/error","/api/restaurants","/api/qr/**","/api/orders/**",
                                 "/api/admin/**").permitAll() //지금 임시로 열어두는것, 나중에 지우고 위에것으로 사용할 것.
                         .anyRequest().authenticated()
                 )
