@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/restaurants")
 @RequiredArgsConstructor
+@Slf4j
 public class RestuarantController {
 
     private final RestaurantService restaurantService;
@@ -46,8 +49,18 @@ public class RestuarantController {
                     content = @Content)
     })
     @GetMapping
-    public ResponseEntity<List<RestaurantResponseDto>> getRestaurants() {
-        List<RestaurantResponseDto> restaurants = restaurantService.getAllRestaurants();
-        return ResponseEntity.ok(restaurants);
+    public ResponseEntity<?> getRestaurants() {
+        try {
+            List<RestaurantResponseDto> restaurants = restaurantService.getAllRestaurants();
+            return ResponseEntity.ok(restaurants);
+        } catch (IllegalArgumentException e) { //400
+            log.warn("잘못된 요청 값으로 식당 목록 조회 시도: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        catch (Exception e) { //500
+            log.error("식당 목록 조회 중 오류 발생", e);
+            String errorMessage = "식당 목록 조회 실패: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        }
     }
 }
