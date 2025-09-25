@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,11 +43,22 @@ public class RestuarantController {
 
             @ApiResponse(responseCode = "404", description = "찾을 수 없음 (Not Found)." +
                     "해당 경로(api/restaurants)를 찾을 수 없을 때 발생합니다.",
-                    content = @Content),
-
+                    content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE,
+                            schema = @Schema(implementation = String.class),
+                            examples = @ExampleObject(
+                                    name = "데이터 없음 예시",
+                                    value = "등록된 식당 정보가 없습니다."
+                            )
+                    )),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류 (Internal Server Error)." +
                     "데이터베이스 연결 실패 등 서버 내부에서 예상치 못한 오류가 발생했을 때 반환됩니다.",
-                    content = @Content)
+                    content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE,
+                            schema = @Schema(implementation = String.class),
+                            examples = @ExampleObject(
+                                    name = "서버 오류 예시",
+                                    value = "식당 목록 조회 실패: 서버 내부 오류 발생"
+                            )
+                    ))
     })
     @GetMapping
     public ResponseEntity<?> getRestaurants() {
