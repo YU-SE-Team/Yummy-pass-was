@@ -52,10 +52,11 @@ public class RestuarantController {
     public ResponseEntity<?> getRestaurants() {
         try {
             List<RestaurantResponseDto> restaurants = restaurantService.getAllRestaurants();
+
+            if (restaurants.isEmpty()) //400
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("등록된 식당 정보가 없습니다.");
+
             return ResponseEntity.ok(restaurants);
-        } catch (IllegalArgumentException e) { //400
-            log.warn("잘못된 요청 값으로 식당 목록 조회 시도: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         catch (Exception e) { //500
             log.error("식당 목록 조회 중 오류 발생", e);
