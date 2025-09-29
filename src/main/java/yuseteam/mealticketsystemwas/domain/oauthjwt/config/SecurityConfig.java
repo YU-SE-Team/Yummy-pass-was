@@ -3,6 +3,7 @@ package yuseteam.mealticketsystemwas.domain.oauthjwt.config;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -24,6 +25,7 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -81,7 +83,7 @@ public class SecurityConfig {
                         //.requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/", "/api/auth/signin", "/api/auth/signup", "/api/menus/**",
                                 "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**",
-                                "/webjars/**", "/error","/api/restaurants","/api/qr/**","/api/orders/**",
+                                "/webjars/**", "/error","/api/restaurants","/api/orders/**",
                                 "/api/admin/**").permitAll() //지금 임시로 열어두는것, 나중에 지우고 위에것으로 사용할 것.
                         .anyRequest().authenticated()
                 )

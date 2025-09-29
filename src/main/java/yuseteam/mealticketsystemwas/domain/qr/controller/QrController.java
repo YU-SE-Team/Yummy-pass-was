@@ -15,10 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateResponse;
 import yuseteam.mealticketsystemwas.domain.qr.dto.QrInfoResponse;
-import yuseteam.mealticketsystemwas.domain.qr.dto.QrUseRequest;
+import yuseteam.mealticketsystemwas.domain.qr.service.QrService;
 import yuseteam.mealticketsystemwas.domain.qr.service.S3Service;
 
 import java.io.ByteArrayOutputStream;
@@ -32,10 +33,11 @@ import java.util.UUID;
 public class QrController {
 
     private final S3Service s3;
+    private final QrService qrService;
 
     @Operation(
             summary = "식권 QR 생성",
-            description = "식권용 QR 코드를 생성하여 S3에 PNG로 업로드하고, QR의 사용상태(초기값 false)를 저장합니다.",
+            description = "식권용 QR 코드를 생성하여 S3에 PNG로 업로드하고, QR의 사용상태(초기값 false)를 저장합니다.\n\n**권한:** STUDENT",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -68,6 +70,7 @@ public class QrController {
             }
     )
     @PostMapping()
+    @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<QrCreateResponse> createMealTicketQr() {
         try {
             String uuid = UUID.randomUUID().toString();
@@ -98,7 +101,7 @@ public class QrController {
 
     @Operation(
             summary = "QR 사용",
-            description = "QR을 사용 처리하고(상태를 true로 갱신), 해당 QR 이미지 파일을 S3에서 삭제합니다.",
+            description = "QR을 사용 처리하고(상태를 true로 갱신), 해당 QR 이미지 파일을 S3에서 삭제합니다.\n\n**권한:** STUDENT",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -124,8 +127,9 @@ public class QrController {
             }
     )
     @PostMapping("/use")
+    @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<String> useQr(@RequestParam String uuid) {
-        Boolean used = s3.getQrStatus(uuid);
+        Boolean used = qrService.useQr(uuid);
         if (used == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 QR입니다.");
         }
@@ -146,7 +150,7 @@ public class QrController {
 
     @Operation(
         summary = "QR 정보 조회",
-        description = "uuid로 QR 이미지 URL과 사용 상태를 조회합니다.",
+        description = "uuid로 QR 이미지 URL과 사용 상태를 조회합니다.\n\n**권한:** STUDENT",
         responses = {
             @ApiResponse(
                 responseCode = "200",
@@ -172,6 +176,7 @@ public class QrController {
         }
     )
     @GetMapping("/info")
+    @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<?> getQrInfo(@RequestParam String uuid) {
         Boolean used = s3.getQrStatus(uuid);
         if (used == null) {

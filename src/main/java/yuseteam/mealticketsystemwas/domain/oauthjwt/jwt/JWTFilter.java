@@ -13,6 +13,9 @@ import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 
 import java.io.IOException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.List;
 
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -55,7 +58,7 @@ public class JWTFilter extends OncePerRequestFilter {
         Long userId = jwtService.parseUserId(tokenValue);
 
         User user = userRepository.findById(userId)
-                .orElse(null); // 사용자가 없으면 null
+                .orElse(null);
 
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -69,7 +72,15 @@ public class JWTFilter extends OncePerRequestFilter {
         userDTO.setName(user.getName());
         userDTO.setSocialname(user.getSocialname());
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDTO, null, null);
+        String rawRole = user.getRole().name();
+        String normalizedRole = (rawRole != null && rawRole.startsWith("ROLE_"))
+                ? rawRole
+                : "ROLE_" + rawRole;
+
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(normalizedRole));
+
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(userDTO, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         Cookie cookie = new Cookie("Authorization", authToken);
