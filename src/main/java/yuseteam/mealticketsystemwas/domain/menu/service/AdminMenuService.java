@@ -54,4 +54,11 @@ public class AdminMenuService {
                 .map(AdminMenuResponse::from)
                 .toList();
     }
+
+    @Transactional
+    public AdminMenuResponse getMenu(Long menuId) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(()->new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
+        return AdminMenuResponse.from(menu);
+    }
 }
