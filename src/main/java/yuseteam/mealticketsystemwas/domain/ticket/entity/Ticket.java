@@ -1,4 +1,4 @@
-package yuseteam.mealticketsystemwas.entity;
+package yuseteam.mealticketsystemwas.domain.ticket.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
-import yuseteam.mealticketsystemwas.entity.Ticket;
+import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 
 import java.util.List;
 //하위 - , 가격, 식권 수, 판매 식권 수, 식당, 음식 카테고리, Ticket(Fk)
