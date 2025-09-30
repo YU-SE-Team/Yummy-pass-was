@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,9 @@ public class Ticket {
     private Long id;
 
     private String menuName;
+
     private String qrCode;
+
     private String restaurant;
 
     @Column(nullable = false)
@@ -26,19 +29,21 @@ public class Ticket {
     private LocalDateTime purchaseTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="menu_id")
     private Menu menu;
-
-    //User(FK)
-
     //임시
     @Builder // 빌더 패턴 적용
-    public Ticket(String menuName, String qrCode, String restaurant, boolean isUsed, LocalDateTime purchaseTime, Menu menu) {
+    public Ticket(String menuName, String qrCode, String restaurant, boolean isUsed, LocalDateTime purchaseTime, Menu menu, User user) {
         this.menuName = menuName;
         this.qrCode = qrCode;
         this.restaurant = restaurant;
         this.isUsed = isUsed;
         this.purchaseTime = purchaseTime;
         this.menu = menu;
+        this.user = user;
     }
 }
