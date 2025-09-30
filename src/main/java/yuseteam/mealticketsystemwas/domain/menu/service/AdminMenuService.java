@@ -58,11 +58,17 @@ public class AdminMenuService {
     }
 
     @Transactional
+    public AdminMenuResponse getMenu(Long menuId) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(()->new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
+        return AdminMenuResponse.from(menu);
+    }
+  
+    @Transactional
     public AdminMenuResponse updateMenu(Long menuId, @Valid AdminMenuUpdateRequest req) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
         menu.update(req);
         return AdminMenuResponse.from(menu);
-
     }
 }

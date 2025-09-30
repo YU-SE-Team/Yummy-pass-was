@@ -31,15 +31,24 @@ public class AdminMenuController {
         menuService.deleteMenu(menuId);
         return ResponseEntity.ok("삭제 완료");
     }
-    //메뉴 조회
+    //전체 메뉴 조회
     @GetMapping("/menu")
     public ResponseEntity<List<AdminMenuResponse>> getMenus(){
         return ResponseEntity.ok(menuService.getMenus());
     }
-
+    
+    //특정 메뉴 조회
+    @GetMapping("/menu/{menuId}")
+    public ResponseEntity<AdminMenuResponse> getMenu(@PathVariable Long menuId){
+        AdminMenuResponse response = menuService.getMenu(menuId);
+        return ResponseEntity.ok(response);
+    }
+  
+    //메뉴 수정
     @PatchMapping("/menu/{menuId}")
     public ResponseEntity<AdminMenuResponse> updateMenu(@PathVariable Long menuId, @Valid @RequestBody AdminMenuUpdateRequest req){
         AdminMenuResponse updateMenu = menuService.updateMenu(menuId, req);
         return ResponseEntity.ok(updateMenu);
     }
+
 }
