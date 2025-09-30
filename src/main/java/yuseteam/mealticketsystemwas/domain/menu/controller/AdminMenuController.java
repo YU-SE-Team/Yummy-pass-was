@@ -30,9 +30,17 @@ public class AdminMenuController {
         menuService.deleteMenu(menuId);
         return ResponseEntity.ok("삭제 완료");
     }
-    //메뉴 조회
+    //전체 메뉴 조회
     @GetMapping("/menu")
     public ResponseEntity<List<AdminMenuResponse>> getMenus(){
         return ResponseEntity.ok(menuService.getMenus());
     }
+
+    //특정 메뉴 조회
+    @GetMapping("/menu/{menuId}")
+    public ResponseEntity<AdminMenuResponse> getMenu(@PathVariable Long menuId){
+        AdminMenuResponse response = menuService.getMenu(menuId);
+        return ResponseEntity.ok(response);
+    }
+
 }
