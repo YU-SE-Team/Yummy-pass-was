@@ -52,5 +52,13 @@ public class Menu {
         if (req.getVisible() != null) {
             this.visible = req.getVisible();
         }
+    }
+
+    //판매량 증가
+    public void sellTicket() {
+        if (this.soldTicket >= this.totalCount) {
+            throw new IllegalArgumentException("재고가 부족하여 식권을 판매할 수 없습니다.");
         }
+        this.soldTicket++;
+    }
 }
