@@ -1,6 +1,7 @@
 package yuseteam.mealticketsystemwas.domain.oauthjwt.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -81,10 +82,19 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         //.requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/", "/api/auth/signin", "/api/auth/signup", "/api/menus/**",
-                                "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**",
-                                "/webjars/**", "/error","/api/restaurants","/api/orders/**",
-                                "/api/admin/**").permitAll() //지금 임시로 열어두는것, 나중에 지우고 위에것으로 사용할 것.
+                        .requestMatchers("/",
+                                "/swagger-resources/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/webjars/**",
+                                "/error",
+                                "/api/auth/signin",
+                                "/api/auth/signup",
+                                "/api/menus/**",
+                                "/api/restaurants",
+                                "/api/orders/**",
+                                "/api/admin/**"
+                        ).permitAll() //지금 임시로 열어두는것, 나중에 지우고 위에것으로 사용할 것.
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -93,7 +103,18 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);
-
+//                .exceptionHandling(exception -> exception
+//                        .authenticationEntryPoint((request, response, authException) -> {
+//                            response.setContentType("application/json;charset=UTF-8");
+//                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                            response.getWriter().write("{\"error\":\"Unauthorized\",\"message\":\"로그인이 필요합니다.\"}");
+//                        })
+//                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+//                            response.setContentType("application/json;charset=UTF-8");
+//                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//                            response.getWriter().write("{\"error\":\"Forbidden\",\"message\":\"권한이 없습니다.\"}");
+//                        })
+//                );
         return http.build();
     }
 

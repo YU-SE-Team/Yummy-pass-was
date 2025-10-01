@@ -7,8 +7,6 @@ import yuseteam.mealticketsystemwas.domain.oauthjwt.RoleType;
 @Getter
 @Setter
 public class UserDTO {
-
-    @Getter
     private Long id;
     private RoleType role;
     private String name;
