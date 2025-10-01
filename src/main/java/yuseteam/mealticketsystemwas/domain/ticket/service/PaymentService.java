@@ -29,7 +29,7 @@ public class PaymentService {
         //1. 유저, 메뉴 정보 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        Menu menu = menuRepository.findById(menuId)
+        Menu menu = menuRepository.findAndLockById(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
 
         //2. 재고 확인
