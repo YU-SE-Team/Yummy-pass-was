@@ -13,7 +13,9 @@ public class PaymentRes {
     private String menuName;
     private String restaurantName;
     private LocalDateTime purchaseTime;
-    private String qrCodeUrl ;
+    private String qrUuid;
+    private String category;
+    private boolean isUsed;
 
     public static PaymentRes from(Ticket ticket) {
         return PaymentRes.builder()
@@ -21,7 +23,9 @@ public class PaymentRes {
                 .menuName(ticket.getMenuName())
                 .restaurantName(ticket.getRestaurant())
                 .purchaseTime(ticket.getPurchaseTime())
-                .qrCodeUrl(ticket.getQrCode())
+                .qrUuid(ticket.getQrCode())
+                .category(ticket.getCategory())
+                .isUsed(ticket.getIsUsed())
                 .build();
     }
 }
