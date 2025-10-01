@@ -5,14 +5,14 @@ import lombok.Getter;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
 public class OrderConfirmationResponse {
 
     private String userName;
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
     private String menuName;
     private int price;
     private String restaurantName;
@@ -20,7 +20,7 @@ public class OrderConfirmationResponse {
     public static OrderConfirmationResponse of(User user, Menu menu) {
         return OrderConfirmationResponse.builder()
                 .userName(user.getName())
-                .orderDate(LocalDate.now())
+                .orderDate(LocalDateTime.now())
                 .menuName(menu.getName())
                 .price(menu.getPrice())
                 .restaurantName(menu.getRestaurant().getName())
