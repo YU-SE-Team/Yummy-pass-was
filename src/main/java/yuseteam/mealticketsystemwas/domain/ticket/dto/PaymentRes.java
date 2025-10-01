@@ -20,12 +20,12 @@ public class PaymentRes {
     public static PaymentRes from(Ticket ticket) {
         return PaymentRes.builder()
                 .ticketId(ticket.getId())
-                .menuName(ticket.getMenuName())
-                .restaurantName(ticket.getRestaurant())
-                .purchaseTime(ticket.getPurchaseTime())
                 .qrUuid(ticket.getQrCode())
-                .category(ticket.getMenu().getCategory())
                 .isUsed(ticket.getIsUsed())
+                .menuName(ticket.getMenuName())
+                .purchaseTime(ticket.getPurchaseTime())
+                .restaurantName(ticket.getRestaurant())
+                .category(ticket.getMenu().getCategory())
                 .build();
     }
 }
