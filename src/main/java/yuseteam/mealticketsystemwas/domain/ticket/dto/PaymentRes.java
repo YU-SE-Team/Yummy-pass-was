@@ -24,7 +24,7 @@ public class PaymentRes {
                 .restaurantName(ticket.getRestaurant())
                 .purchaseTime(ticket.getPurchaseTime())
                 .qrUuid(ticket.getQrCode())
-                .category(ticket.getCategory())
+                .category(ticket.getMenu().getCategory())
                 .isUsed(ticket.getIsUsed())
                 .build();
     }
