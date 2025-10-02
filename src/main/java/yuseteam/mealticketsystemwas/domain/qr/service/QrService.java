@@ -57,6 +57,7 @@ public class QrService {
         }
     }
 
+    @Transactional
     public Boolean useQr(String uuid) {
         validateStudentRole();
 
