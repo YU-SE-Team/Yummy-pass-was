@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.service.AuthInitialSetupService;
 
 import java.util.Map;
@@ -70,7 +69,7 @@ public class AuthInitialSetupController {
                                     @ExampleObject(name = "ADMIN", value = "{ \"role\":\"ADMIN\", \"phone\":\"01099998888\" }")
                             })
             )
-            @RequestBody User body,
+            @RequestBody AuthInitialSetupService.InitialSetupRequest body,
             HttpServletRequest request,
             HttpServletResponse response) {
 

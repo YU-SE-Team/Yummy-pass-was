@@ -37,7 +37,7 @@ public class AuthInitialSetupService {
     }
 
     @Transactional
-    public Map<String, Object> initialSetup(User req,
+    public Map<String, Object> initialSetup(InitialSetupRequest req,
                                             HttpServletRequest request,
                                             HttpServletResponse response) {
         Map<String, Object> body = new LinkedHashMap<>();
@@ -62,13 +62,28 @@ public class AuthInitialSetupService {
             return body;
         }
 
+        // 이미 초기 설정이 끝난 사용자 방지
+        if (user.getRole() != null || user.getPhone() != null) {
+            body.put("error", "이미 초기 설정이 완료된 사용자입니다.");
+            body.put("status", 400);
+            body.put("role", user.getRole() == null ? null : user.getRole().name());
+            body.put("phone", user.getPhone());
+            return body;
+        }
+
+        if (req.getRole() == null) {
+            body.put("error", "role 은 필수입니다.");
+            body.put("status", 400);
+            return body;
+        }
+
         if (req.getPhone() == null || !req.getPhone().matches("\\d{11}")) {
             body.put("error", "전화번호는 숫자만 입력 가능하며, 11자리여야 합니다.");
             body.put("status", 400);
             return body;
         }
         boolean phoneExists = userRepository.existsByPhone(req.getPhone());
-        if (phoneExists && (user.getPhone() == null || !req.getPhone().equals(user.getPhone()))) {
+        if (phoneExists) {
             body.put("error", "이미 등록된 전화번호입니다.");
             body.put("status", 409);
             return body;
@@ -88,9 +103,10 @@ public class AuthInitialSetupService {
         response.addCookie(cookie);
 
         body.put("message", "initial setup complete");
+        body.put("id", user.getId());
         body.put("userId", user.getId());
-        body.put("role", req.getRole().name());
-        body.put("phone", req.getPhone());
+        body.put("role", user.getRole().name());
+        body.put("phone", user.getPhone());
         body.put("token", newToken);
         body.put("status", 200);
         return body;

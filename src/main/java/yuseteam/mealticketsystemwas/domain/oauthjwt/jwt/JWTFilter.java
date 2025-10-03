@@ -15,6 +15,7 @@ import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 import java.io.IOException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.Collections;
 import java.util.List;
 
 public class JWTFilter extends OncePerRequestFilter {
@@ -72,12 +73,14 @@ public class JWTFilter extends OncePerRequestFilter {
         userDTO.setName(user.getName());
         userDTO.setSocialname(user.getSocialname());
 
-        String rawRole = user.getRole().name();
-        String normalizedRole = (rawRole != null && rawRole.startsWith("ROLE_"))
-                ? rawRole
-                : "ROLE_" + rawRole;
-
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(normalizedRole));
+        List<GrantedAuthority> authorities;
+        if (user.getRole() != null) {
+            String rawRole = user.getRole().name();
+            String normalizedRole = rawRole.startsWith("ROLE_") ? rawRole : "ROLE_" + rawRole;
+            authorities = List.of(new SimpleGrantedAuthority(normalizedRole));
+        } else {
+            authorities = Collections.emptyList();
+        }
 
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(userDTO, null, authorities);
