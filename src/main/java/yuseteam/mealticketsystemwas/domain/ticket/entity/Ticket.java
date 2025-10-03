@@ -46,4 +46,9 @@ public class Ticket {
         this.menu = menu;
         this.user = user;
     }
+
+    public void use() {
+        this.isUsed = true;
+    }
+
 }

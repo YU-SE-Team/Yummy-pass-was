@@ -73,29 +73,11 @@ public class QrController {
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<QrCreateResponse> createMealTicketQr() {
         try {
-            String uuid = UUID.randomUUID().toString();
-            String contents = "https://localhost:8080/api/qr/use?uuid=" + uuid; // 서버 배포 후 수정 필요
-
-            int width = 200;
-            int height = 200;
-            BitMatrix matrix = new MultiFormatWriter()
-                    .encode(contents, BarcodeFormat.QR_CODE, width, height);
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            MatrixToImageWriter.writeToStream(matrix, "PNG", baos);
-            byte[] pngBytes = baos.toByteArray();
-
-            String imgKey = s3.imageKey(uuid);
-            String imageUrl = s3.uploadImageBytes(pngBytes, imgKey, MediaType.IMAGE_PNG_VALUE);
-
-            s3.saveQrStatus(uuid, false);
-
-            return ResponseEntity.ok(new QrCreateResponse(uuid, imageUrl));
-
+            QrCreateResponse res = qrService.createAndUploadQr();
+            return ResponseEntity.ok(res);
         } catch (Exception e) {
             log.error("QR 생성 실패", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -129,22 +111,13 @@ public class QrController {
     @PostMapping("/use")
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<String> useQr(@RequestParam String uuid) {
-        Boolean used = qrService.useQr(uuid);
-        if (used == null) {
+        Boolean result = qrService.useQr(uuid);
+        if (result == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 QR입니다.");
         }
-        if (used) {
+        if (result) {
             return ResponseEntity.ok("이미 사용된 QR입니다.");
         }
-
-        s3.saveQrStatus(uuid, true);
-
-        try {
-            s3.deleteObject(s3.imageKey(uuid));
-        } catch (Exception e) {
-            log.warn("QR 이미지 삭제 실패 : {}", e.getMessage());
-        }
-
         return ResponseEntity.ok("QR 사용 성공 (uuid=" + uuid + ")");
     }
 
@@ -178,11 +151,10 @@ public class QrController {
     @GetMapping("/info")
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<?> getQrInfo(@RequestParam String uuid) {
-        Boolean used = s3.getQrStatus(uuid);
-        if (used == null) {
+        QrInfoResponse info = qrService.getQrInfo(uuid);
+        if (info == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 QR입니다.");
         }
-        String imageUrl = s3.publicUrl(s3.imageKey(uuid));
-        return ResponseEntity.ok(new QrInfoResponse(uuid, imageUrl, used));
+        return ResponseEntity.ok(info);
     }
 }

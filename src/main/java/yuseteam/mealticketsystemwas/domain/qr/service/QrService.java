@@ -8,8 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.transaction.annotation.Transactional;
 import yuseteam.mealticketsystemwas.config.SecurityUtil;
 import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateResponse;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrInfoResponse;
+import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
+import yuseteam.mealticketsystemwas.domain.ticket.repository.TicketRepository;
 
 import java.io.ByteArrayOutputStream;
 import java.util.UUID;
@@ -19,6 +23,7 @@ import java.util.UUID;
 public class QrService {
 
     private final S3Service s3Service;
+    private final TicketRepository ticketRepository;
 
     //ticket쪽에 생성하기 위한 메소드가 필요해서 controller->service단으로 이동
     public QrCreateResponse createAndUploadQr() {
@@ -52,22 +57,35 @@ public class QrService {
         }
     }
 
+    @Transactional
     public Boolean useQr(String uuid) {
         validateStudentRole();
 
-        Boolean used = s3Service.getQrStatus(uuid);
-        if (used == null) {
+        Ticket ticket = ticketRepository.findByQrCode(uuid).orElse(null);
+        if (ticket == null) {
             return null;
         }
-        if (used) {
+        if (Boolean.TRUE.equals(ticket.getIsUsed())) {
             return true;
         }
 
-        s3Service.saveQrStatus(uuid, true);
+        ticket.use();
+
         try {
             s3Service.deleteObject(s3Service.imageKey(uuid));
         } catch (Exception e) {
         }
         return false;
     }
+
+    @Transactional(readOnly = true)
+    public QrInfoResponse getQrInfo(String uuid) {
+        Ticket ticket = ticketRepository.findByQrCode(uuid).orElse(null);
+        if (ticket == null) {
+            return null;
+        }
+        String imageUrl = s3Service.publicUrl(s3Service.imageKey(uuid));
+        return new QrInfoResponse(uuid, imageUrl, Boolean.TRUE.equals(ticket.getIsUsed()));
+    }
+
 }
