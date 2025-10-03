@@ -35,10 +35,11 @@ public class MenuSalesSnapshotService {
             for (Menu menu : menus) {
                 int currentSales = menu.getSoldTicket();
 
+
                 MenuSalesSnapshot snapshot = menuSalesSnapshotrepository.findByMenu(menu)
                         .orElseGet(() -> {
                             log.debug("메뉴 ID {} - 신규 스냅샷 생성", menu.getId());
-                            return new MenuSalesSnapshot(menu);
+                            return MenuSalesSnapshot.createNew(menu);
                         });
 
                 snapshot.updateSnapshot(currentSales, now);
