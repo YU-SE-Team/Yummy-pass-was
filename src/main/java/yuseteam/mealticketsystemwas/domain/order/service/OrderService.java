@@ -43,10 +43,18 @@ public class OrderService {
                     .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
 
             int unit = menu.getPrice();
-            int qty = Math.max(0, reqItem.getQuantity());
-            int lineTotal = unit * qty;
+            int requestedQty = Math.max(0, reqItem.getQuantity());
 
-            totalQty += qty;
+            // 재고(남은 수량) 계산: totalCount - soldTicket
+            int remaining = menu.getTotalCount() - menu.getSoldTicket();
+            if (requestedQty > remaining) {
+                throw new IllegalArgumentException(
+                        String.format("메뉴 '%s' 재고 부족: 요청 %d개, 남은 %d개", menu.getName(), requestedQty, remaining)
+                );
+            }
+
+            int lineTotal = unit * requestedQty;
+            totalQty += requestedQty;
             totalAmt += lineTotal;
 
             lines.add(OrderSummaryRes.Line.builder()
@@ -54,7 +62,7 @@ public class OrderService {
                     .menuName(menu.getName())
                     .restaurantName(menu.getRestaurant().getName())
                     .unitPrice(unit)
-                    .quantity(qty)
+                    .quantity(requestedQty)
                     .lineTotal(lineTotal)
                     .build());
         }
