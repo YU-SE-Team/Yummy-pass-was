@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class OrderConfirmationResponse {
+public class OrderConfirmationRes {
 
     private String userName;
     private LocalDateTime orderDate;
@@ -17,8 +17,8 @@ public class OrderConfirmationResponse {
     private int price;
     private String restaurantName;
 
-    public static OrderConfirmationResponse of(User user, Menu menu) {
-        return OrderConfirmationResponse.builder()
+    public static OrderConfirmationRes of(User user, Menu menu) {
+        return OrderConfirmationRes.builder()
                 .userName(user.getName())
                 .orderDate(LocalDateTime.now())
                 .menuName(menu.getName())
