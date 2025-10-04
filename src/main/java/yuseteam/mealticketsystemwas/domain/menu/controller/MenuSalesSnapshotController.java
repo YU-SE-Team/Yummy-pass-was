@@ -33,7 +33,7 @@ public class MenuSalesSnapshotController {
 
         for(Menu menu : menus) {
             Integer latestSales = menuSalesSnapshotrepository
-                    .findTopByMenuOrderbySnapshotTimeDesc(menu)
+                    .findTopByMenuOrderBySnapshotTimeDesc(menu)
                     .map(MenuSalesSnapshot::getSalesInInterval)
                     .orElse(0);
             res.put(menu.getId(), latestSales);

@@ -24,23 +24,23 @@ public class MenuSalesSnapshotService {
 
     //crontab expression: 초, 분, 시, 일, 월, 요일
     //5분마다 실행 (매 시 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55분)
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */1 * * * *")
     @Transactional
     public void recordMenuSalesSnapshot() {
         List<Menu> menus = menuRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
 
         for (Menu menu : menus) {
-            int currentSales = menu.getCumulativeSoldQuantity();
+            int currentCumulativeSales = menu.getCumulativeSoldQuantity();
 
             //5분 전의 마지막 스냅샷 조회
-            Integer priviousCumulativeSales = menuSalesSnapshotrepository
-                    .findTopbyMenuOrderBySnapshotTimeDesc(menu)
-                    .map(MenuSalesSnapshot::getCumulativeSalesAtPoint)
+            Integer previousCumulativeSales = menuSalesSnapshotrepository
+                    .findTopByMenuOrderBySnapshotTimeDesc(menu)
+                    .map(MenuSalesSnapshot::getCumulativeSales)
                     .orElse(0); //최초엔 0
 
             //5분간 판매량 계산
-            int salesInInterval = currentCumulativeSales - priviousCumulativeSales;
+            int salesInInterval = currentCumulativeSales - previousCumulativeSales;
 
             MenuSalesSnapshot newSnapshot = MenuSalesSnapshot.of(
                     menu,
