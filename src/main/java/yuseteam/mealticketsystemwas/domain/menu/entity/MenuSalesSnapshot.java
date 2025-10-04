@@ -8,49 +8,31 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "menu_sales_snapshot")
+@Table(name = "menu_sales_snapshot", indexes = {
+        @Index(name = "idx_menu_snapshot", columnList = "menu_id, snapshot_time")
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MenuSalesSnapshot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id", unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id", nullable = false)
     private Menu menu;
 
-    //이전 판매량 및 시간
-    private Integer previousSalesCount;
-    private LocalDateTime previousRecordedAt;
+    private LocalDateTime snapshotTime; //그래프 X축
+    private Integer salesInInterval; //그래프 Y축
 
-    //현재 판매량 및 시간
-    private Integer currentSalesCount;
-    private LocalDateTime currentRecordedAt;
+    private Integer cumulativeSales;
 
-
-    public static MenuSalesSnapshot createNew(Menu menu) {
+    public static MenuSalesSnapshot of(Menu menu, LocalDateTime snapshotTime,
+                                       Integer salesInInterval, Integer cumulativeSales) {
         MenuSalesSnapshot snapshot = new MenuSalesSnapshot();
         snapshot.menu = menu;
-        snapshot.previousSalesCount = 0;
-        snapshot.currentSalesCount = 0;
-        snapshot.currentRecordedAt = LocalDateTime.now();
+        snapshot.snapshotTime = snapshotTime;
+        snapshot.salesInInterval = salesInInterval;
+        snapshot.cumulativeSales = cumulativeSales;
         return snapshot;
-    }
-
-    public void updateSnapshot(int newSalesCount, LocalDateTime newRecordTime) {
-        //현재 -> 이전
-        this.previousSalesCount = this.currentSalesCount;
-        this.previousRecordedAt = this.currentRecordedAt;
-
-        //신규 -> 현재
-        this.currentSalesCount = newSalesCount;
-        this.currentRecordedAt = newRecordTime;
-    }
-
-    public int getSalesDiff() {
-        if (previousSalesCount == null || currentSalesCount == null) {
-            return 0;
-        }
-        return currentSalesCount - previousSalesCount;
     }
 }
