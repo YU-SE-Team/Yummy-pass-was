@@ -23,7 +23,6 @@ public class MenuSalesSnapshot {
 
     private LocalDateTime snapshotTime; //그래프 X축
     private Integer salesInInterval; //그래프 Y축
-
     private Integer cumulativeSales;
 
     public static MenuSalesSnapshot of(Menu menu, LocalDateTime snapshotTime,

@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Service;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
@@ -26,39 +27,40 @@ public class MenuSalesSnapshotService {
     @Scheduled(cron = "0 */5 * * * *")
     @Transactional
     public void recordMenuSalesSnapshot() {
+        List<Menu> menus = menuRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
 
-        try {
-            List<Menu> menus = menuRepository.findAll();
-            int updatedCount = 0;
+        for (Menu menu : menus) {
+            int currentSales = menu.getCumulativeSoldQuantity();
 
-            for (Menu menu : menus) {
-                int currentSales = menu.getCumulativeSoldQuantity();
+            //5분 전의 마지막 스냅샷 조회
+            Integer priviousCumulativeSales = menuSalesSnapshotrepository
+                    .findTopbyMenuOrderBySnapshotTimeDesc(menu)
+                    .map(MenuSalesSnapshot::getCumulativeSalesAtPoint)
+                    .orElse(0); //최초엔 0
 
+            //5분간 판매량 계산
+            int salesInInterval = currentCumulativeSales - priviousCumulativeSales;
 
-                MenuSalesSnapshot snapshot = menuSalesSnapshotrepository.findByMenu(menu)
-                        .orElseGet(() -> {
-                            log.debug("메뉴 ID {} - 신규 스냅샷 생성", menu.getId());
-                            return MenuSalesSnapshot.createNew(menu);
-                        });
+            MenuSalesSnapshot newSnapshot = MenuSalesSnapshot.of(
+                    menu,
+                    now,
+                    salesInInterval,
+                    currentCumulativeSales
+            );
 
-                snapshot.updateSnapshot(currentSales, now);
-                menuSalesSnapshotrepository.save(snapshot);
+            menuSalesSnapshotrepository.save(newSnapshot);
 
-                log.debug("메뉴 ID: {}, 이름: {}, 이전: {}, 현재: {}, 변화: {}",
-                        menu.getId(),
-                        menu.getName(),
-                        snapshot.getPreviousSalesCount(),
-                        snapshot.getCurrentSalesCount(),
-                        snapshot.getSalesDiff());
-
-                updatedCount++;
-            }
-
-            log.info("=== [판매량 스냅샷 기록] 완료 - 총 {}개 메뉴 업데이트 ===", updatedCount);
-        } catch (Exception e) {
-            log.error("=== [판매량 스냅샷 기록] 실패 ===", e);
-            throw e;
+            log.info("메뉴 [{}] - 이번 5분간 판매: {}개, 누적: {}개",
+                    menu.getName(), salesInInterval, currentCumulativeSales);
         }
+    }
+
+    //매일 자정에 모든 메뉴 판매 스냅샷 초기화
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
+    public void resetDailySnapshots() {
+        menuSalesSnapshotrepository.deleteAll();
+        log.info("매일 자정에 모든 메뉴 판매 스냅샷이 초기화되었습니다.");
     }
 }
