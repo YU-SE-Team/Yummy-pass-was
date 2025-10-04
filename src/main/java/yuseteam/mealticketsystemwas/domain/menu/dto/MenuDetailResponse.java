@@ -14,6 +14,6 @@ public class MenuDetailResponse {
         this.id = menu.getId();
         this.name = menu.getName();
         this.price = menu.getPrice();
-        this.remainingTickets = menu.getTotalCount() - menu.getSoldTicket();
+        this.remainingTickets = menu.getTotalQuantity() - menu.getCumulativeSoldQuantity();
     }
 }

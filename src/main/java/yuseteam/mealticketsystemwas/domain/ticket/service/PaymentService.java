@@ -14,7 +14,6 @@ import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 import yuseteam.mealticketsystemwas.domain.ticket.repository.TicketRepository;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class PaymentService {
                 .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
 
         //2. 재고 확인
-        if (menu.getSoldTicket() >= menu.getTotalCount()) {
+        if (menu.getCumulativeSoldQuantity() >= menu.getTotalQuantity()) {
             throw new IllegalArgumentException("식권이 모두 판매 되었습니다.");
         }
 

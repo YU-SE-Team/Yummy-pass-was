@@ -25,8 +25,8 @@ public class AdminMenuCreateResponse {
                 .name(menu.getName())
                 .photoUrl(menu.getPhotoUrl())
                 .price(menu.getPrice())
-                .totalCount(menu.getTotalCount())
-                .soldTicket(menu.getSoldTicket())
+                .totalCount(menu.getTotalQuantity())
+                .soldTicket(menu.getCumulativeSoldQuantity())
                 .category(menu.getCategory())
                 .visible(menu.getVisible())
                 .build();

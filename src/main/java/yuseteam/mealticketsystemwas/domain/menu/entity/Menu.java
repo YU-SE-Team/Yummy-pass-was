@@ -7,9 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
-import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 
-import java.util.List;
 //하위 - , 가격, 식권 수, 판매 식권 수, 식당, 음식 카테고리, Ticket(Fk)
 @Entity
 @Getter
@@ -23,8 +21,8 @@ public class Menu {
     private String name;
     private String photoUrl;
     private int price;
-    private int totalCount;
-    private int soldTicket;
+    private int totalQuantity; //재고량
+    private int cumulativeSoldQuantity; //지금까지 팔린 총 누적 판매량
     private String category;
     private Boolean visible = true;
 
@@ -40,7 +38,7 @@ public class Menu {
             this.price = req.getPrice();
         }
         if (req.getTotalCount() != null) {
-            this.totalCount = req.getTotalCount();
+            this.totalQuantity = req.getTotalCount();
         }
         if (req.getCategory() != null) {
             this.category = req.getCategory();
@@ -52,9 +50,9 @@ public class Menu {
 
     //판매량 증가
     public void sellTicket() {
-        if (this.soldTicket >= this.totalCount) {
+        if (this.cumulativeSoldQuantity >= this.totalQuantity) {
             throw new IllegalArgumentException("재고가 부족하여 식권을 판매할 수 없습니다.");
         }
-        this.soldTicket++;
+        this.cumulativeSoldQuantity++;
     }
 }

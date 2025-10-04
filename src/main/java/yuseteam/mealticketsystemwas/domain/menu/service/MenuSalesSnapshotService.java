@@ -33,7 +33,7 @@ public class MenuSalesSnapshotService {
             int updatedCount = 0;
 
             for (Menu menu : menus) {
-                int currentSales = menu.getSoldTicket();
+                int currentSales = menu.getCumulativeSoldQuantity();
 
 
                 MenuSalesSnapshot snapshot = menuSalesSnapshotrepository.findByMenu(menu)
