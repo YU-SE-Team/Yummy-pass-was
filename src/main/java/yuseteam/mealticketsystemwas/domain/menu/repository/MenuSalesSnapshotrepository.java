@@ -19,12 +19,4 @@ public interface MenuSalesSnapshotrepository extends JpaRepository<MenuSalesSnap
             Menu menu,
             LocalDateTime startTime
     );
-
-    @Query("SELECT s FROM MenuSalesSnapshot s WHERE s.menu.id = :menuId " +
-            "AND s.snapshotTime >= :startOfDay ORDER BY s.snapshotTime ASC")
-    List<MenuSalesSnapshot> findTodaySnapshotsByMenuId(
-            @Param("menuId") Long menuId,
-            @Param("startOfDay") LocalDateTime startOfDay
-    );
-
 }

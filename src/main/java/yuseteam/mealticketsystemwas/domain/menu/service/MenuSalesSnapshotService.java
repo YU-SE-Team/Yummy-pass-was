@@ -72,7 +72,7 @@ public class MenuSalesSnapshotService {
                 .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
 
         //오늘 10시를 시작 시간으로 설정
-        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atTime(10, 0, 0);
+        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atTime(0, 0, 0);
 
         //시작부터 현재까지의 총 데이터를 조회
         List<MenuSalesSnapshot> snapshots = menuSalesSnapshotrepository
