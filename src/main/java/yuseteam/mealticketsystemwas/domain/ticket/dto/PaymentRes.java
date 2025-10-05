@@ -26,7 +26,7 @@ public class PaymentRes {
                 .purchaseTime(ticket.getPurchaseTime())
                 .menuName(oi.getMenuNameSnapshot())
                 .restaurantName(oi.getRestaurantNameSnapshot())
-                .category(oi.getMenu().getCategory())
+                .category(oi.getMenu().getCategory().getCategory())
                 .build();
     }
 }

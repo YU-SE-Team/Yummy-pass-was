@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import yuseteam.mealticketsystemwas.domain.menu.entity.MenuCategory;
 
 @Getter
 @Setter
@@ -20,6 +21,6 @@ public class AdminMenuCreateRequest {
     private Integer price;
 
     private Integer totalCount;
-    private String category;
+    private MenuCategory category;
     private Boolean visible;
 }

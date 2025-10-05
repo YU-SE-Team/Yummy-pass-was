@@ -8,7 +8,10 @@ import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateRequest;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.entity.MenuCategory;
 import yuseteam.mealticketsystemwas.domain.menu.service.AdminMenuService;
+import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
+import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
 
 import java.util.List;
 
@@ -17,6 +20,7 @@ import java.util.List;
 @RequestMapping("api/admin")
 public class AdminMenuController {
     private final AdminMenuService menuService;
+    private final RestaurantRepository restaurantRepository;
 
     //메뉴 등록
     @PostMapping("/menu")
@@ -49,6 +53,12 @@ public class AdminMenuController {
     public ResponseEntity<AdminMenuResponse> updateMenu(@PathVariable Long menuId, @Valid @RequestBody AdminMenuUpdateRequest req){
         AdminMenuResponse updateMenu = menuService.updateMenu(menuId, req);
         return ResponseEntity.ok(updateMenu);
+    }
+
+    //식당별 카테고리 목록
+    @GetMapping("/menu/categories/{restaurantId}")
+    public ResponseEntity<List<String>> getCategoreisByRestaurant(@PathVariable Long restaurantId){
+        return ResponseEntity.ok(menuService.getCategoriesByRestaurant(restaurantId));
     }
 
 }

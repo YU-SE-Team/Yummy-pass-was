@@ -9,6 +9,7 @@ import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateRequest;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.entity.MenuCategory;
 import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
 import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
@@ -70,5 +71,16 @@ public class AdminMenuService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
         menu.update(req);
         return AdminMenuResponse.from(menu);
+    }
+
+    @Transactional
+    public List<String> getCategoriesByRestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 식당을 찾을 수 없습니다."));
+
+        return MenuCategory.getCategoriesByRestaurant(restaurant.getName())
+                .stream()
+                .map(MenuCategory::getCategory)
+                .toList();
     }
 }

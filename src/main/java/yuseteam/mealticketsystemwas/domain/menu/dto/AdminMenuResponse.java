@@ -27,7 +27,7 @@ public class AdminMenuResponse {
                 .price(menu.getPrice())
                 .totalCount(menu.getTotalCount())
                 .soldTicket(menu.getSoldTicket())
-                .category(menu.getCategory())
+                .category(menu.getCategory().getCategory())
                 .visible(menu.getVisible())
                 .restaurantName(menu.getRestaurant().getName())
                 .build();

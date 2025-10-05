@@ -25,7 +25,10 @@ public class Menu {
     private int price;
     private int totalCount;
     private int soldTicket;
-    private String category;
+
+    @Enumerated(EnumType.STRING)
+    private MenuCategory category;
+
     private Boolean visible = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,7 +46,7 @@ public class Menu {
             this.totalCount = req.getTotalCount();
         }
         if (req.getCategory() != null) {
-            this.category = req.getCategory();
+            this.category = MenuCategory.valueOf(req.getCategory());
         }
         if (req.getVisible() != null) {
             this.visible = req.getVisible();
