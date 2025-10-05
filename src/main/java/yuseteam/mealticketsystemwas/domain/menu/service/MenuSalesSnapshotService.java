@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Service;
 import yuseteam.mealticketsystemwas.domain.menu.dto.MenuResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.MenuSalesGraphRes;
+import yuseteam.mealticketsystemwas.domain.menu.dto.SalesDataPoint;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
 import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
@@ -77,11 +78,11 @@ public class MenuSalesSnapshotService {
         List<MenuSalesSnapshot> snapshots = menuSalesSnapshotrepository
                 .findByMenuAndSnapshotTimeAfterOrderBySnapshotTimeAsc(menu, startOfDay);
 
-        List<MenuSalesGraphRes.SalesDataPoint> dataPoints = snapshots.stream()
-                .map(snapshot -> new MenuSalesGraphRes.SalesDataPoint(
+        List<SalesDataPoint> dataPoints = snapshots.stream()
+                .map(snapshot -> new SalesDataPoint(
                         snapshot.getSnapshotTime(),
-                        snapshot.getSalesInInterval().longValue(),
-                        snapshot.getCumulativeSales().longValue()
+                        snapshot.getSalesInInterval(),
+                        snapshot.getCumulativeSales()
                 ))
                 .toList();
 

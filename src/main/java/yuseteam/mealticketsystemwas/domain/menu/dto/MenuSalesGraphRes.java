@@ -8,6 +8,7 @@ import java.util.Map;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class MenuSalesGraphRes {
     private Long menuId;
     private String menuName;
