@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Service;
+import yuseteam.mealticketsystemwas.domain.menu.dto.MenuResponse;
+import yuseteam.mealticketsystemwas.domain.menu.dto.MenuSalesGraphRes;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
 import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
@@ -62,5 +64,31 @@ public class MenuSalesSnapshotService {
     public void resetDailySnapshots() {
         menuSalesSnapshotrepository.deleteAll();
         log.info("매일 자정에 모든 메뉴 판매 스냅샷이 초기화되었습니다.");
+    }
+
+    public MenuSalesGraphRes getMenuSalesSnapshot(Long menuId) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
+
+        //오늘 10시를 시작 시간으로 설정
+        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atTime(10, 0, 0);
+
+        //시작부터 현재까지의 총 데이터를 조회
+        List<MenuSalesSnapshot> snapshots = menuSalesSnapshotrepository
+                .findByMenuAndSnapshotTimeAfterOrderBySnapshotTimeAsc(menu, startOfDay);
+
+        List<MenuSalesGraphRes.SalesDataPoint> dataPoints = snapshots.stream()
+                .map(snapshot -> new MenuSalesGraphRes.SalesDataPoint(
+                        snapshot.getSnapshotTime(),
+                        snapshot.getSalesInInterval().longValue(),
+                        snapshot.getCumulativeSales().longValue()
+                ))
+                .toList();
+
+        return new MenuSalesGraphRes(
+                menu.getId(),
+                menu.getName(),
+                dataPoints
+        );
     }
 }

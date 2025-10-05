@@ -45,7 +45,7 @@ public class OrderService {
             int unit = menu.getPrice();
             int requestedQty = Math.max(0, reqItem.getQuantity());
 
-            int remaining = menu.getTotalCount() - menu.getSoldTicket();
+            int remaining = menu.getTotalQuantity() - menu.getCumulativeSoldQuantity();
             if (requestedQty > remaining) {
                 throw new IllegalArgumentException(
                         String.format("메뉴 '%s' 재고 부족: 요청 %d개, 남은 %d개", menu.getName(), requestedQty, remaining)

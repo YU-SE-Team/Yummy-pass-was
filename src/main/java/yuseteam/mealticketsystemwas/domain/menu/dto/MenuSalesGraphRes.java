@@ -12,12 +12,4 @@ public class MenuSalesGraphRes {
     private Long menuId;
     private String menuName;
     private List<SalesDataPoint> salesDataPoints;
-
-    @Getter
-    @AllArgsConstructor
-    public static class SalesDataPoint {
-        private LocalDateTime snapshotTime;
-        private Long salesInInterval;
-        private Long cumulativeSales;
-    }
 }
