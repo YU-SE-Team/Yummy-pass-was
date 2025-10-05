@@ -8,21 +8,23 @@ import java.util.List;
 @Getter
 public enum MenuCategory {
 
-    KOREAN("한식", "학생회관"),
-    SPECIAL("스페셜", "학생회관"),
-    PORK("돈가스", "학생회관"),
+    PORK("돈가스", "학생회관", 1),
+    SPECIAL("스페셜", "학생회관", 2),
+    KOREAN("한식", "학생회관", 3),
 
-    A("A", "자연계"),
-    C1("C1", "자연계"),
-    C2("C2", "자연계"),
-    D("D", "자연계");
+    A("A", "자연계", 4),
+    C1("C1", "자연계", 5),
+    C2("C2", "자연계", 6),
+    D("D", "자연계", 7);
 
     private final String category;
     private final String restaurant;
+    private final int sort;
 
-    MenuCategory(String category, String restaurant){
+    MenuCategory(String category, String restaurant,int sort){
         this.category = category;
         this.restaurant = restaurant;
+        this.sort = sort;
     }
 
     public static List<MenuCategory> getCategoriesByRestaurant(String restaurant) {

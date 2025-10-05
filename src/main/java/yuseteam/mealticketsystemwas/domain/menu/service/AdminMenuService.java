@@ -15,6 +15,7 @@ import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
 import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -54,6 +55,7 @@ public class AdminMenuService {
     public List<AdminMenuResponse> getMenus() {
         return menuRepository.findAll()
                 .stream()
+                .sorted(Comparator.comparingInt(menu -> menu.getCategory().getSort()))
                 .map(AdminMenuResponse::from)
                 .toList();
     }
