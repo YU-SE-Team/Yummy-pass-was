@@ -23,7 +23,10 @@ public class Menu {
     private int price;
     private int totalQuantity; //재고량
     private int cumulativeSoldQuantity; //지금까지 팔린 총 누적 판매량
-    private String category;
+  
+    @Enumerated(EnumType.STRING)
+    private MenuCategory category;
+
     private Boolean visible = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,7 +44,7 @@ public class Menu {
             this.totalQuantity = req.getTotalCount();
         }
         if (req.getCategory() != null) {
-            this.category = req.getCategory();
+            this.category = MenuCategory.valueOf(req.getCategory());
         }
         if (req.getVisible() != null) {
             this.visible = req.getVisible();

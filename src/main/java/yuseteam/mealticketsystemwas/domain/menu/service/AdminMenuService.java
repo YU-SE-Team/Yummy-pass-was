@@ -9,11 +9,13 @@ import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateRequest;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.entity.MenuCategory;
 import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
 import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -53,6 +55,7 @@ public class AdminMenuService {
     public List<AdminMenuResponse> getMenus() {
         return menuRepository.findAll()
                 .stream()
+                .sorted(Comparator.comparingInt(menu -> menu.getCategory().getSort()))
                 .map(AdminMenuResponse::from)
                 .toList();
     }
@@ -70,5 +73,16 @@ public class AdminMenuService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
         menu.update(req);
         return AdminMenuResponse.from(menu);
+    }
+
+    @Transactional
+    public List<String> getCategoriesByRestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 식당을 찾을 수 없습니다."));
+
+        return MenuCategory.getCategoriesByRestaurant(restaurant.getName())
+                .stream()
+                .map(MenuCategory::getCategory)
+                .toList();
     }
 }
