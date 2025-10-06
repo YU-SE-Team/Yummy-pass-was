@@ -57,8 +57,7 @@ public class AdminMenuController {
 
     //식당별 카테고리 목록
     @GetMapping("/menu/categories/{restaurantId}")
-    public ResponseEntity<List<String>> getCategoriesByRestaurant(@PathVariable Long restaurantId){
+    public ResponseEntity<List<String>> getCategoreisByRestaurant(@PathVariable Long restaurantId){
         return ResponseEntity.ok(menuService.getCategoriesByRestaurant(restaurantId));
     }
-
 }
