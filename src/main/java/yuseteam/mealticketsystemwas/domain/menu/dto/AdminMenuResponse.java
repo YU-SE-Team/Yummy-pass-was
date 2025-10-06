@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Builder;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.entity.MenuCategory;
 
 @Getter
 @Builder
@@ -15,7 +16,7 @@ public class AdminMenuResponse {
     private final int price;
     private final int totalCount;
     private final int soldTicket;
-    private final String category;
+    private final MenuCategory category;
     private final Boolean visible;
     private final String restaurantName;
 
