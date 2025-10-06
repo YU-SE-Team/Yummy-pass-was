@@ -1,8 +1,6 @@
 package yuseteam.mealticketsystemwas.domain.menu.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
 
