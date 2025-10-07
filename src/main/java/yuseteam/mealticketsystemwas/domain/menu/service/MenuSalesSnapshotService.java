@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import yuseteam.mealticketsystemwas.domain.menu.dto.MenuSalesGraphRes;
-import yuseteam.mealticketsystemwas.domain.menu.dto.PopularMenuRes;
+import yuseteam.mealticketsystemwas.domain.menu.dto.PopularMenuListRes;
 import yuseteam.mealticketsystemwas.domain.menu.dto.SalesDataPoint;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
@@ -95,7 +95,7 @@ public class MenuSalesSnapshotService {
         );
     }
 
-    public PopularMenuRes getMostPopularMenuByRestaurant(Long restaurantId) {
+    public PopularMenuListRes getMostPopularMenuByRestaurant(Long restaurantId) {
         //레스토랑의 모든 메뉴 조회
         List<Menu> getAllMenus = menuRepository.findByRestaurantId(restaurantId);
 
@@ -113,28 +113,31 @@ public class MenuSalesSnapshotService {
                         twentyMinutesAgo
                 );
 
-        //스냅샷을 메뉴벼로 그룹화
+        //스냅샷을 메뉴별로 그룹화
         Map<Long, Integer> menuSalesMap = snapshots.stream()
                 .collect(Collectors.groupingBy(
                         snapshot -> snapshot.getMenu().getId(),
                         Collectors.summingInt(MenuSalesSnapshot::getSalesInInterval)
                 ));
-        //메뉴마다 판매량 계산, 가장 많이 팔린 메뉴 찾기
-        Menu mostPopularMenu = getAllMenus.stream()
-                .max(Comparator
-                        .comparingInt((Menu menu) -> menuSalesMap.getOrDefault(menu.getId(), 0))
-                        .thenComparing(Menu::getId) //판매량이 같으면 ID가 낮은 메뉴 선택
-                )
-                .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
 
-        Integer totalSales = menuSalesMap.getOrDefault(mostPopularMenu.getId(), 0);
+        //가장 높은 판매량 찾기
+        Integer maxSales = getAllMenus.stream()
+                .map(menu -> menuSalesMap.getOrDefault(menu.getId(), 0))
+                .max(Integer::compareTo)
+                .orElse(0);
 
-        log.info("레스토랑 [{}] 최근 20분 인기 메뉴: [{}] ({}개 판매)",
-                restaurantId, mostPopularMenu.getName(), totalSales);
+        //최대 판매량과 동일한 판매량을 가진 모든 메뉴 찾기
+        List<String> popularMenuNames = getAllMenus.stream()
+                .filter(menu -> menuSalesMap.getOrDefault(menu.getId(), 0).equals(maxSales))
+                .map(Menu::getName)
+                .toList();
 
-        return new PopularMenuRes(
-                mostPopularMenu.getName(),
-                totalSales
+        log.info("레스토랑 [{}] 최근 20분 인기 메뉴: {} ({}개 판매)",
+                restaurantId, popularMenuNames, maxSales);
+
+        return new PopularMenuListRes(
+                popularMenuNames,
+                maxSales
         );
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yuseteam.mealticketsystemwas.domain.menu.dto.MenuSalesGraphRes;
-import yuseteam.mealticketsystemwas.domain.menu.dto.PopularMenuRes;
+import yuseteam.mealticketsystemwas.domain.menu.dto.PopularMenuListRes;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
 import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
@@ -51,8 +51,8 @@ public class MenuSalesSnapshotController {
     }
 
     @GetMapping("/restaurant/{restaurantId}/popular-menus")
-    public ResponseEntity<PopularMenuRes> getPopularMenus(@PathVariable Long restaurantId) {
-        PopularMenuRes res = menuSalesSnapshotService
+    public ResponseEntity<PopularMenuListRes> getPopularMenus(@PathVariable Long restaurantId) {
+        PopularMenuListRes res = menuSalesSnapshotService
                 .getMostPopularMenuByRestaurant(restaurantId);
         return ResponseEntity.ok(res);
     }
