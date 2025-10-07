@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yuseteam.mealticketsystemwas.domain.ticket.dto.TicketResponse;
-import yuseteam.mealticketsystemwas.domain.ticket.repository.TicketRepository;
 import yuseteam.mealticketsystemwas.domain.ticket.service.TicketService;
 
 import java.util.List;
