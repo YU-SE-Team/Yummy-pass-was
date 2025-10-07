@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import yuseteam.mealticketsystemwas.domain.menu.dto.MenuSalesGraphRes;
+import yuseteam.mealticketsystemwas.domain.menu.dto.PopularMenuRes;
 import yuseteam.mealticketsystemwas.domain.menu.dto.SalesDataPoint;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
@@ -13,7 +14,10 @@ import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.menu.repository.MenuSalesSnapshotrepository;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -88,6 +92,49 @@ public class MenuSalesSnapshotService {
                 menu.getId(),
                 menu.getName(),
                 dataPoints
+        );
+    }
+
+    public PopularMenuRes getMostPopularMenuByRestaurant(Long restaurantId) {
+        //레스토랑의 모든 메뉴 조회
+        List<Menu> getAllMenus = menuRepository.findByRestaurantId(restaurantId);
+
+        if (getAllMenus.isEmpty()) {
+            throw new IllegalArgumentException("해당 레스토랑에 메뉴가 없습니다.");
+        }
+
+        //20분 전 시간 계산
+        LocalDateTime twentyMinutesAgo = LocalDateTime.now().minusMinutes(20);
+
+        //최근 20분간의 스냅샷 조회
+        List<MenuSalesSnapshot> snapshots = menuSalesSnapshotrepository
+                .findByMenuRestaurantIdAndSnapshotTimeGreaterThanEqual(
+                        restaurantId,
+                        twentyMinutesAgo
+                );
+
+        //스냅샷을 메뉴벼로 그룹화
+        Map<Long, Integer> menuSalesMap = snapshots.stream()
+                .collect(Collectors.groupingBy(
+                        snapshot -> snapshot.getMenu().getId(),
+                        Collectors.summingInt(MenuSalesSnapshot::getSalesInInterval)
+                ));
+        //메뉴마다 판매량 계산, 가장 많이 팔린 메뉴 찾기
+        Menu mostPopularMenu = getAllMenus.stream()
+                .max(Comparator
+                        .comparingInt((Menu menu) -> menuSalesMap.getOrDefault(menu.getId(), 0))
+                        .thenComparing(Menu::getId) //판매량이 같으면 ID가 낮은 메뉴 선택
+                )
+                .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
+
+        Integer totalSales = menuSalesMap.getOrDefault(mostPopularMenu.getId(), 0);
+
+        log.info("레스토랑 [{}] 최근 20분 인기 메뉴: [{}] ({}개 판매)",
+                restaurantId, mostPopularMenu.getName(), totalSales);
+
+        return new PopularMenuRes(
+                mostPopularMenu.getName(),
+                totalSales
         );
     }
 }
