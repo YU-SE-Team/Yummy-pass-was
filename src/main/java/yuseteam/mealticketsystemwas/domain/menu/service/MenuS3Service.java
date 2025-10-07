@@ -48,7 +48,12 @@ public class MenuS3Service {
         return publicUrl;
     }
     private String getImageKey(String imageUrl) {
-        return imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+        int lastSlash = imageUrl.lastIndexOf("/");
+        if (lastSlash == -1) {
+            // Optionally log a warning here if desired
+            return imageUrl;
+        }
+        return imageUrl.substring(lastSlash + 1);
     }
     private String getImageExtension(MultipartFile image) {
         String extension = "";
