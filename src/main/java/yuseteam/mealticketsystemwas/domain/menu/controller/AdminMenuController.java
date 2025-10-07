@@ -8,9 +8,7 @@ import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateRequest;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
-import yuseteam.mealticketsystemwas.domain.menu.entity.MenuCategory;
 import yuseteam.mealticketsystemwas.domain.menu.service.AdminMenuService;
-import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
 import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public class AdminMenuController {
 
     //메뉴 등록
     @PostMapping("/menu")
-    public ResponseEntity<AdminMenuCreateResponse> createMenu(@Valid @RequestBody AdminMenuCreateRequest req) {
+    public ResponseEntity<AdminMenuCreateResponse> createMenu(@ModelAttribute AdminMenuCreateRequest req) {
         AdminMenuCreateResponse created = menuService.createMenu(req);
         return ResponseEntity.ok(created);
     }
@@ -50,7 +48,7 @@ public class AdminMenuController {
   
     //메뉴 수정
     @PatchMapping("/menu/{menuId}")
-    public ResponseEntity<AdminMenuResponse> updateMenu(@PathVariable Long menuId, @Valid @RequestBody AdminMenuUpdateRequest req){
+    public ResponseEntity<AdminMenuResponse> updateMenu(@PathVariable Long menuId, @ModelAttribute AdminMenuUpdateRequest req){
         AdminMenuResponse updateMenu = menuService.updateMenu(menuId, req);
         return ResponseEntity.ok(updateMenu);
     }

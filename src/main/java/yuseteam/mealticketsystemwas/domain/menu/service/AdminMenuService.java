@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateRequest;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuResponse;
@@ -23,6 +24,7 @@ import java.util.List;
 public class AdminMenuService {
     private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;
+    private final MenuS3Service s3Service;
 
     @Transactional
     public AdminMenuCreateResponse createMenu(AdminMenuCreateRequest req) {
@@ -31,7 +33,6 @@ public class AdminMenuService {
 
         Menu menu = Menu.builder()
                 .name(req.getName())
-                .photoUrl(req.getPhotoUrl())
                 .price(req.getPrice())
                 .totalQuantity(req.getTotalCount())
                 .cumulativeSoldQuantity(0)
@@ -40,14 +41,26 @@ public class AdminMenuService {
                 .restaurant(restaurant)
                 .build();
 
+        MultipartFile image = req.getImage();
+        if (image != null ) {
+            String imageUrl = s3Service.uploadMenuImage(image, menu);
+            menu.setPhotoUrl(imageUrl);
+        }
+
         Menu saveMenu = menuRepository.save(menu);
         return AdminMenuCreateResponse.from(saveMenu);
     }
+
+
 
     @Transactional
     public void deleteMenu(Long menuId) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
+
+        if (menu.getPhotoUrl() != null) {
+            s3Service.deleteMenuImage(menu);
+        }
         menuRepository.delete(menu);
     }
 
@@ -71,6 +84,12 @@ public class AdminMenuService {
     public AdminMenuResponse updateMenu(Long menuId, @Valid AdminMenuUpdateRequest req) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
+
+        MultipartFile image = req.getImage();
+        if (image != null) {
+            menu.setPhotoUrl(s3Service.uploadMenuImage(image, menu));
+        }
+
         menu.update(req);
         return AdminMenuResponse.from(menu);
     }

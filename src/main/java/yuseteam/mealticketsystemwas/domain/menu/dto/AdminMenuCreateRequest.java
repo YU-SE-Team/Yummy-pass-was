@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 import yuseteam.mealticketsystemwas.domain.menu.entity.MenuCategory;
 
 @Getter
@@ -15,7 +16,7 @@ public class AdminMenuCreateRequest {
     private Long restaurantId;
     @NotBlank
     private String name;
-    private String photoUrl;
+    private MultipartFile image;
 
     @NotNull
     private Integer price;

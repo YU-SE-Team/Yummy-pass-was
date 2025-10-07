@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //하위 - , 가격, 식권 수, 판매 식권 수, 식당, 음식 카테고리, Ticket(Fk)
 @Entity
 @Getter
@@ -23,7 +26,8 @@ public class Menu {
     private int price;
     private int totalQuantity; //재고량
     private int cumulativeSoldQuantity; //지금까지 팔린 총 누적 판매량
-  
+
+
     @Enumerated(EnumType.STRING)
     private MenuCategory category;
 
@@ -32,6 +36,11 @@ public class Menu {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
+
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MenuSalesSnapshot> salesSnapshots = new ArrayList<>();
+
+
 
     public void update(AdminMenuUpdateRequest req) {
         if (req.getName() != null) {
@@ -57,5 +66,9 @@ public class Menu {
             throw new IllegalArgumentException("재고가 부족하여 식권을 판매할 수 없습니다.");
         }
         this.cumulativeSoldQuantity++;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
