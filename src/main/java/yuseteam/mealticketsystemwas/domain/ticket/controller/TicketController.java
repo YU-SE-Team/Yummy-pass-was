@@ -1,5 +1,6 @@
 package yuseteam.mealticketsystemwas.domain.ticket.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/tickets")
+@Tag(name = "Ticket", description = "티켓 사용·미사용·만료 조회 API")
 public class TicketController {
     private final TicketService ticketService;
 
