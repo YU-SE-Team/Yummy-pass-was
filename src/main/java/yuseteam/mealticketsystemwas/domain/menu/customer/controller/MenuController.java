@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/menus")
 @RequiredArgsConstructor
-@Tag(name = "메뉴 조회", description = "고객용 메뉴 조회 API")
+@Tag(name = "Menu Search", description = "고객용 메뉴 조회 API")
 public class MenuController {
 
     private final MenuService menuService;
