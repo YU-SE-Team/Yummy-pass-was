@@ -12,11 +12,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class TicketService {
 
     private final TicketRepository ticketRepository;
 
+    @Transactional(readOnly = true)
     public List<TicketResponse> getExpiredTickets(){
         LocalDateTime expiredTime = LocalDateTime.now().minusDays(1);
         List<Ticket> expiredTickets = ticketRepository.findByIsUsedFalseAndPurchaseTimeBefore(expiredTime);
@@ -25,4 +25,15 @@ public class TicketService {
                 .map(TicketResponse::fromEntity)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<TicketResponse> getUnusedTickets() {
+        List<Ticket> unusedTickets = ticketRepository.findByIsUsedFalse();
+
+        return unusedTickets.stream()
+                .map(TicketResponse::fromEntity)
+                .toList();
+    }
+
+
 }
