@@ -13,6 +13,8 @@ public interface MenuRepository extends JpaRepository<Menu,Long> {
 
     List<Menu> findByRestaurantIdAndCategory(Long restaurantId, String category);
 
+    List<Menu> findByRestaurantId(Long restaurantId);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select m from Menu m where m.id = :id")
     Optional<Menu> findAndLockById(Long id);
