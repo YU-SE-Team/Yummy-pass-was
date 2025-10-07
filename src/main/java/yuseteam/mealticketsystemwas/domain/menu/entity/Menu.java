@@ -27,8 +27,6 @@ public class Menu {
     private int totalQuantity; //재고량
     private int cumulativeSoldQuantity; //지금까지 팔린 총 누적 판매량
 
-    @Column(name = "sold_ticket")
-    private int soldTicket = 0;
 
     @Enumerated(EnumType.STRING)
     private MenuCategory category;
