@@ -1,4 +1,4 @@
-package yuseteam.mealticketsystemwas.domain.menu.entity;
+package yuseteam.mealticketsystemwas.domain.menu.common.entity;
 
 import lombok.Getter;
 

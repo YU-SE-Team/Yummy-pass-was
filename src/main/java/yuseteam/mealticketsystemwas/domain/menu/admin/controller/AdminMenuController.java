@@ -1,14 +1,13 @@
-package yuseteam.mealticketsystemwas.domain.menu.controller;
+package yuseteam.mealticketsystemwas.domain.menu.admin.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateRequest;
-import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateResponse;
-import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuResponse;
-import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
-import yuseteam.mealticketsystemwas.domain.menu.service.AdminMenuService;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateResponse;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuResponse;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.admin.service.AdminMenuService;
 import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
 
 import java.util.List;

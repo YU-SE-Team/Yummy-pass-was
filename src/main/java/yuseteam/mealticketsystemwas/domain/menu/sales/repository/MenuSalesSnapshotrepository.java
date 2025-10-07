@@ -1,8 +1,8 @@
-package yuseteam.mealticketsystemwas.domain.menu.repository;
+package yuseteam.mealticketsystemwas.domain.menu.sales.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
-import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.sales.entity.MenuSalesSnapshot;
 
 import java.time.LocalDateTime;
 import java.util.List;

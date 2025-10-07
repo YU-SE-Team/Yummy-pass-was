@@ -1,4 +1,4 @@
-package yuseteam.mealticketsystemwas.domain.menu.controller;
+package yuseteam.mealticketsystemwas.domain.menu.sales.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yuseteam.mealticketsystemwas.domain.menu.dto.MenuSalesGraphRes;
-import yuseteam.mealticketsystemwas.domain.menu.dto.PopularMenuListRes;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
-import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
-import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
-import yuseteam.mealticketsystemwas.domain.menu.repository.MenuSalesSnapshotrepository;
-import yuseteam.mealticketsystemwas.domain.menu.service.MenuSalesSnapshotService;
+import yuseteam.mealticketsystemwas.domain.menu.sales.dto.MenuSalesGraphRes;
+import yuseteam.mealticketsystemwas.domain.menu.sales.dto.PopularMenuListRes;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.sales.entity.MenuSalesSnapshot;
+import yuseteam.mealticketsystemwas.domain.menu.common.repository.MenuRepository;
+import yuseteam.mealticketsystemwas.domain.menu.sales.repository.MenuSalesSnapshotrepository;
+import yuseteam.mealticketsystemwas.domain.menu.sales.service.MenuSalesSnapshotService;
 
 import java.util.HashMap;
 import java.util.List;

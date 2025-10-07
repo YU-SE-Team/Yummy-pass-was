@@ -1,11 +1,12 @@
-package yuseteam.mealticketsystemwas.domain.menu.entity;
+package yuseteam.mealticketsystemwas.domain.menu.common.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.sales.entity.MenuSalesSnapshot;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
 
 import java.util.ArrayList;

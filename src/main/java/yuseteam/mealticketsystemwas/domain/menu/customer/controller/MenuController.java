@@ -1,4 +1,4 @@
-package yuseteam.mealticketsystemwas.domain.menu.controller;
+package yuseteam.mealticketsystemwas.domain.menu.customer.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yuseteam.mealticketsystemwas.domain.menu.dto.MenuDetailResponse;
-import yuseteam.mealticketsystemwas.domain.menu.dto.MenuResponse;
+import yuseteam.mealticketsystemwas.domain.menu.common.dto.MenuDetailResponse;
+import yuseteam.mealticketsystemwas.domain.menu.common.dto.MenuResponse;
 
-import yuseteam.mealticketsystemwas.domain.menu.service.MenuService;
+import yuseteam.mealticketsystemwas.domain.menu.customer.service.MenuService;
 
 import java.util.List;
 

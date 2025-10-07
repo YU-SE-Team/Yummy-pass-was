@@ -1,7 +1,7 @@
-package yuseteam.mealticketsystemwas.domain.menu.dto;
+package yuseteam.mealticketsystemwas.domain.menu.common.dto;
 
 import lombok.Getter;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
 
 @Getter
 public class MenuResponse {

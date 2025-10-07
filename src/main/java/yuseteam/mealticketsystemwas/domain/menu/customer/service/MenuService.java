@@ -1,12 +1,12 @@
-package yuseteam.mealticketsystemwas.domain.menu.service;
+package yuseteam.mealticketsystemwas.domain.menu.customer.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import yuseteam.mealticketsystemwas.domain.menu.dto.MenuDetailResponse;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
-import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
-import yuseteam.mealticketsystemwas.domain.menu.dto.MenuResponse;
+import yuseteam.mealticketsystemwas.domain.menu.common.dto.MenuDetailResponse;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.common.repository.MenuRepository;
+import yuseteam.mealticketsystemwas.domain.menu.common.dto.MenuResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
