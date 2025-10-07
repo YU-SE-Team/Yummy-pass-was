@@ -17,4 +17,10 @@ public interface MenuSalesSnapshotrepository extends JpaRepository<MenuSalesSnap
             Menu menu,
             LocalDateTime startTime
     );
+
+    //특정 식당의 특정 시간 이후의 모든 메뉴 스냅샷 조회(인기메뉴용)
+    List<MenuSalesSnapshot> findByMenuRestaurantIdAndSnapshotTimeGreaterThanEqual(
+            Long restaurantId,
+            LocalDateTime startTime
+    );
 }
