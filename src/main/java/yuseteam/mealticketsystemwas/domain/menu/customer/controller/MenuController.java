@@ -31,7 +31,7 @@ public class MenuController {
     @Operation(
             summary = "레스토랑별 카테고리 메뉴 목록 조회",
             description = "특정 레스토랑의 특정 카테고리에 해당하는 메뉴 목록을 조회합니다.\n\n" +
-                    "카테고리: KOREAN(한식), CHINESE(중식), JAPANESE(일식), WESTERN(양식), SNACK(분식)"
+                    "카테고리: 'KOREAN', 'SPECIAL', 'PORK', 'A', 'C1', 'C2', 'D'"
     )
     @ApiResponses(value = {
             @ApiResponse(
