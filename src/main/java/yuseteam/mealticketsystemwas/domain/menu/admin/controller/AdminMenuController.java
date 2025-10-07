@@ -1,5 +1,6 @@
 package yuseteam.mealticketsystemwas.domain.menu.admin.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/admin")
+@Tag(name = "Admin Menu", description = "관리자 메뉴 관리 API")
 public class AdminMenuController {
     private final AdminMenuService menuService;
     private final RestaurantRepository restaurantRepository;
