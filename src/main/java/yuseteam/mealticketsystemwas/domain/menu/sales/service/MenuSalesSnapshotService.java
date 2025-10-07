@@ -1,17 +1,17 @@
-package yuseteam.mealticketsystemwas.domain.menu.service;
+package yuseteam.mealticketsystemwas.domain.menu.sales.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import yuseteam.mealticketsystemwas.domain.menu.dto.MenuSalesGraphRes;
-import yuseteam.mealticketsystemwas.domain.menu.dto.PopularMenuListRes;
-import yuseteam.mealticketsystemwas.domain.menu.dto.SalesDataPoint;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
-import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
-import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
-import yuseteam.mealticketsystemwas.domain.menu.repository.MenuSalesSnapshotrepository;
+import yuseteam.mealticketsystemwas.domain.menu.sales.dto.MenuSalesGraphRes;
+import yuseteam.mealticketsystemwas.domain.menu.sales.dto.PopularMenuListRes;
+import yuseteam.mealticketsystemwas.domain.menu.sales.dto.SalesDataPoint;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.sales.entity.MenuSalesSnapshot;
+import yuseteam.mealticketsystemwas.domain.menu.common.repository.MenuRepository;
+import yuseteam.mealticketsystemwas.domain.menu.sales.repository.MenuSalesSnapshotrepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

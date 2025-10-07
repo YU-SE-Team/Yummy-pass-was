@@ -1,4 +1,4 @@
-package yuseteam.mealticketsystemwas.domain.menu.dto;
+package yuseteam.mealticketsystemwas.domain.menu.admin.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
-import yuseteam.mealticketsystemwas.domain.menu.entity.MenuCategory;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.MenuCategory;
 
 @Getter
 @Setter

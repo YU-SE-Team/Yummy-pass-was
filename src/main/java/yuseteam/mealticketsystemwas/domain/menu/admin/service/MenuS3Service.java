@@ -1,15 +1,14 @@
-package yuseteam.mealticketsystemwas.domain.menu.service;
+package yuseteam.mealticketsystemwas.domain.menu.admin.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
 
 import java.io.IOException;
 import java.util.UUID;

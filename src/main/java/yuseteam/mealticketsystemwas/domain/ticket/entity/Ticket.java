@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.order.entity.OrderItem;
 

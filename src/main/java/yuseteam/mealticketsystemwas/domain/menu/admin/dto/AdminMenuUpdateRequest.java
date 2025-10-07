@@ -1,4 +1,4 @@
-package yuseteam.mealticketsystemwas.domain.menu.dto;
+package yuseteam.mealticketsystemwas.domain.menu.admin.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

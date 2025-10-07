@@ -3,7 +3,7 @@ package yuseteam.mealticketsystemwas.domain.order.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 
 import java.time.LocalDateTime;

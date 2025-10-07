@@ -1,10 +1,10 @@
-package yuseteam.mealticketsystemwas.domain.menu.dto;
+package yuseteam.mealticketsystemwas.domain.menu.admin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
-import yuseteam.mealticketsystemwas.domain.menu.entity.MenuCategory;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.MenuCategory;
 
 @Getter
 @Builder

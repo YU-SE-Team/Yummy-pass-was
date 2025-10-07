@@ -1,4 +1,4 @@
-package yuseteam.mealticketsystemwas.domain.menu.service;
+package yuseteam.mealticketsystemwas.domain.menu.admin.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -6,15 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateRequest;
-import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateResponse;
-import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuResponse;
-import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
-import yuseteam.mealticketsystemwas.domain.menu.entity.MenuCategory;
-import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateResponse;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuResponse;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.MenuCategory;
+import yuseteam.mealticketsystemwas.domain.menu.common.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
 import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
 
 import java.util.Comparator;
 import java.util.List;

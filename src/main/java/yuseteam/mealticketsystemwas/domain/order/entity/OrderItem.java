@@ -2,8 +2,7 @@ package yuseteam.mealticketsystemwas.domain.order.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
-import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
 
 @Entity
 @Getter

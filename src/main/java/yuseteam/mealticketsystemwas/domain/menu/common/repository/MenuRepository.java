@@ -1,10 +1,10 @@
-package yuseteam.mealticketsystemwas.domain.menu.repository;
+package yuseteam.mealticketsystemwas.domain.menu.common.repository;
 
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
-import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
 
 import java.util.List;
 import java.util.Optional;

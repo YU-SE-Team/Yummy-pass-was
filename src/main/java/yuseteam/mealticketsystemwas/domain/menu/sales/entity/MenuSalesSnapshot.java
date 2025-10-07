@@ -1,7 +1,8 @@
-package yuseteam.mealticketsystemwas.domain.menu.entity;
+package yuseteam.mealticketsystemwas.domain.menu.sales.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
 
 import java.time.LocalDateTime;
 

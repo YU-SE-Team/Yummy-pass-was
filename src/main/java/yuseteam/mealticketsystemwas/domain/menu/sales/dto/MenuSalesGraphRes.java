@@ -1,4 +1,4 @@
-package yuseteam.mealticketsystemwas.domain.menu.dto;
+package yuseteam.mealticketsystemwas.domain.menu.sales.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
