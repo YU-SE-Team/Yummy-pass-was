@@ -87,8 +87,7 @@ public class AdminMenuService {
 
         MultipartFile image = req.getImage();
         if (image != null) {
-            String newImageUrl = s3Service.uploadMenuImage(image, menu);
-            menu.setPhotoUrl(newImageUrl);
+            menu.setPhotoUrl(s3Service.uploadMenuImage(image, menu));
         }
 
         menu.update(req);
