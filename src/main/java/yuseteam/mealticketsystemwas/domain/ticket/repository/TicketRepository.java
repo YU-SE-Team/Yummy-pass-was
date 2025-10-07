@@ -1,8 +1,6 @@
 package yuseteam.mealticketsystemwas.domain.ticket.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 
 import java.time.LocalDateTime;
