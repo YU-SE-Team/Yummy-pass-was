@@ -13,4 +13,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findByIsUsedFalseAndPurchaseTimeBefore(LocalDateTime expiredTime);
 
     List<Ticket> findByIsUsedFalse();
+
+    List<Ticket> findByOrderItemMenuIdAndUsedTimeIsNotNullAndReceivedTimeIsNotNull(Long menuId);
+
 }

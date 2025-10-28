@@ -23,6 +23,7 @@ public class TicketResponse {
                 .qrCode(ticket.getQrCode())
                 .isUsed(ticket.getIsUsed())
                 .purchaseTime(ticket.getPurchaseTime())
+                .receivedTime(ticket.getReceivedTime())
                 .userName(ticket.getUser().getName())
                 .menuName(ticket.getOrderItem().getMenu().getName())
                 .build();

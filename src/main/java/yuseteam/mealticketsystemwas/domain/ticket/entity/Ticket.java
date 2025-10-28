@@ -27,6 +27,8 @@ public class Ticket {
 
     private LocalDateTime receivedTime;
 
+    private LocalDateTime usedTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -47,10 +49,13 @@ public class Ticket {
 
     public void use() {
         this.isUsed = true;
+        this.usedTime = LocalDateTime.now();
     }
 
     public void completeReceive(){
         this.receivedTime = LocalDateTime.now();
     }
+
+    public LocalDateTime getUsedTime() { return this.usedTime; }
 
 }
