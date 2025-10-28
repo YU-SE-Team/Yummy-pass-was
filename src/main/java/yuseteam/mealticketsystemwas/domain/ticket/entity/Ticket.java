@@ -25,6 +25,8 @@ public class Ticket {
 
     private LocalDateTime purchaseTime;
 
+    private LocalDateTime receivedTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -34,7 +36,7 @@ public class Ticket {
     @Setter
     private OrderItem orderItem;
 
-    @Builder // 빌더 패턴 적용
+    @Builder
     public Ticket(String menuName, String qrCode, boolean isUsed, LocalDateTime purchaseTime, User user, OrderItem orderItem) {
         this.qrCode = qrCode;
         this.isUsed = isUsed;
@@ -45,6 +47,10 @@ public class Ticket {
 
     public void use() {
         this.isUsed = true;
+    }
+
+    public void completeReceive(){
+        this.receivedTime = LocalDateTime.now();
     }
 
 }

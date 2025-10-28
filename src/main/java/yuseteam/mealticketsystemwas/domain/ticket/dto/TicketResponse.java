@@ -13,6 +13,7 @@ public class TicketResponse {
     private String qrCode;
     private Boolean isUsed;
     private LocalDateTime purchaseTime;
+    private LocalDateTime receivedTime;
     private String userName;
     private String menuName;
 
