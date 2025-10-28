@@ -34,8 +34,6 @@ public class Menu {
 
     private Boolean visible = true;
 
-    private Integer avgProcessingTimeMinutes;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
