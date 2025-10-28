@@ -20,6 +20,7 @@ import yuseteam.mealticketsystemwas.domain.menu.sales.entity.MenuSalesSnapshot;
 import yuseteam.mealticketsystemwas.domain.menu.common.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.menu.sales.repository.MenuSalesSnapshotrepository;
 import yuseteam.mealticketsystemwas.domain.menu.sales.service.MenuSalesSnapshotService;
+import yuseteam.mealticketsystemwas.domain.menu.sales.service.MenuPopularityService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,7 @@ public class MenuSalesSnapshotController {
     private final MenuSalesSnapshotrepository menuSalesSnapshotrepository;
     private final MenuRepository menuRepository;
     private final MenuSalesSnapshotService menuSalesSnapshotService;
+    private final MenuPopularityService menuPopularityService;
 
     @GetMapping("/sales-diff")
     @Operation(
@@ -108,7 +110,7 @@ public class MenuSalesSnapshotController {
             )
     })
     public ResponseEntity<PopularMenuListRes> getPopularMenus(@PathVariable Long restaurantId) {
-        PopularMenuListRes res = menuSalesSnapshotService
+        PopularMenuListRes res = menuPopularityService
                 .getMostPopularMenuByRestaurant(restaurantId);
         return ResponseEntity.ok(res);
     }
