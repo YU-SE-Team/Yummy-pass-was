@@ -35,5 +35,22 @@ public class TicketService {
                 .toList();
     }
 
+    @Transactional
+    public TicketResponse completeReceive(Long ticketId){
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(()->new IllegalArgumentException("식권을 찾을 수 없습니다."));
+
+        if(ticket.getReceivedTime()!= null){
+            throw new IllegalArgumentException("이미 음식 수령 완료 처리되었습니다.");
+        }
+
+        if(!Boolean.TRUE.equals((ticket.getIsUsed()))){
+            throw new IllegalArgumentException("사용 완료된 식권만 수령이 가능합니다.");
+        }
+
+        ticket.completeReceive();
+        Ticket saved = ticketRepository.save(ticket);
+        return TicketResponse.fromEntity(saved);
+    }
 
 }

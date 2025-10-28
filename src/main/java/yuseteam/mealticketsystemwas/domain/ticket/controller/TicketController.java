@@ -3,9 +3,7 @@ package yuseteam.mealticketsystemwas.domain.ticket.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import yuseteam.mealticketsystemwas.domain.ticket.dto.TicketResponse;
 import yuseteam.mealticketsystemwas.domain.ticket.service.TicketService;
 
@@ -29,4 +27,11 @@ public class TicketController {
         List<TicketResponse> unusedTickets = ticketService.getUnusedTickets();
         return ResponseEntity.ok(unusedTickets);
     }
+
+    @PatchMapping("/{ticketId}/receive")
+    public ResponseEntity<TicketResponse> completeReceive(@PathVariable Long ticketId){
+        TicketResponse updated = ticketService.completeReceive(ticketId);
+        return ResponseEntity.ok(updated);
+    }
+
 }
