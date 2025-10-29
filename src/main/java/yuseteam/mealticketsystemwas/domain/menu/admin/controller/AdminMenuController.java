@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/admin")
+@RequestMapping("/api/admin")
 @Tag(name = "Admin Menu", description = "관리자 메뉴 관리 API")
 public class AdminMenuController {
     private final AdminMenuService menuService;
