@@ -11,7 +11,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.UserDTO;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
-
 import java.io.IOException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
