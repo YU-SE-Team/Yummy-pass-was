@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.SignInReqDto;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.SignInResDto;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.SignUpReqDto;
-import yuseteam.mealticketsystemwas.domain.oauthjwt.service.InMemoryLogoutTokenService;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.service.UserService;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.jwt.JWTService;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.service.LogoutService;
 
 @Tag(name = "Auth", description = "인증/회원가입·로그인 API")
 @RestController
@@ -30,7 +33,8 @@ import yuseteam.mealticketsystemwas.domain.oauthjwt.service.UserService;
 public class AuthController {
 
     private final UserService userService;
-    private final InMemoryLogoutTokenService logoutTokenService;
+    private final JWTService jwtService;
+    private final LogoutService logoutService;
 
     @Operation(
             summary = "회원가입",
@@ -96,7 +100,14 @@ public class AuthController {
     public ResponseEntity<SignInResDto> login(@RequestBody SignInReqDto signInReqDto, HttpServletResponse response) {
         try {
             SignInResDto signInResDto = userService.login(signInReqDto);
+            // 헤더 설정(기존 사용 유지)
             response.setHeader("Authorization", signInResDto.getAccessToken());
+            // 쿠키에도 토큰을 설정해서 JWTFilter가 읽을 수 있도록 함
+            Cookie cookie = new Cookie("Authorization", signInResDto.getAccessToken());
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(24 * 60 * 60);
+            response.addCookie(cookie);
             return ResponseEntity.ok(signInResDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new SignInResDto(null, e.getMessage(), null));
@@ -105,7 +116,7 @@ public class AuthController {
 
     @Operation(
         summary = "로그아웃",
-        description = "Authorization 헤더의 JWT를 블랙리스트에 등록하여 만료 전까지 무효화합니다."
+        description = "Authorization 헤더의 JWT를 무효화(버전 증가)하여 만료 전까지 무효화합니다."
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "로그아웃 성공",
@@ -119,11 +130,44 @@ public class AuthController {
     })
     @PostMapping("/logout")
     public ResponseEntity<String> logout(
-            @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
-        if (authorizationHeader == null || authorizationHeader.isBlank()) {
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        String token = null;
+        if (authorizationHeader != null && !authorizationHeader.isBlank()) {
+            token = authorizationHeader.replace("Bearer ", "");
+        } else {
+            // 헤더가 없으면 쿠키에서 찾음
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie c : cookies) {
+                    if ("Authorization".equals(c.getName())) {
+                        token = c.getValue();
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (token == null || token.isBlank()) {
             return ResponseEntity.badRequest().body("유효하지 않은 토큰입니다.");
         }
-        logoutTokenService.blacklistToken(authorizationHeader);
-        return ResponseEntity.ok("로그아웃 성공");
+
+        try {
+            if (jwtService.isExpired(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 만료되었습니다.");
+            }
+            Long userId = jwtService.parseUserId(token);
+            logoutService.logoutByUserId(userId);
+            // Authorization 쿠키 삭제
+            Cookie cookie = new Cookie("Authorization", "");
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+            return ResponseEntity.ok("로그아웃 성공");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("유효하지 않은 토큰입니다.");
+        }
     }
 }

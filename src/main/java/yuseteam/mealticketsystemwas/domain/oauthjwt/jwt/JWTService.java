@@ -11,8 +11,8 @@ public class JWTService {
         this.jwtUtil = jwtUtil;
     }
 
-    public String createToken(Long userId, String roleName) {
-        return jwtUtil.createJwt(userId, roleName, 24L * 60 * 60 * 1000); // 24h
+    public String createToken(Long userId, String roleName, Integer tokenVersion) {
+        return jwtUtil.createJwt(userId, roleName, 24L * 60 * 60 * 1000, tokenVersion); // 24h
     }
 
     public Boolean isExpired(String token) {
@@ -21,6 +21,6 @@ public class JWTService {
 
     public Long parseUserId(String token) { return jwtUtil.parseUserId(token); }
 
-    public String parseRole(String token) { return jwtUtil.parseRole(token); }
+    public Integer parseTokenVersion(String token) { return jwtUtil.parseTokenVersion(token); }
 
 }

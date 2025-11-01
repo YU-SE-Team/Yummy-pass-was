@@ -56,7 +56,8 @@ public class UserService {
         }
 
         String roleName = (user.getRole() == null) ? null : user.getRole().name();
-        String token = jwtService.createToken(user.getId(), roleName);
+        Integer tokenVersion = (user.getTokenVersion() == null) ? 0 : user.getTokenVersion();
+        String token = jwtService.createToken(user.getId(), roleName, tokenVersion);
 
         return new SignInResDto(token, user.getName(), user.getRole());
     }

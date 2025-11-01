@@ -7,6 +7,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JWTUtil {
@@ -21,15 +22,26 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String createJwt(Long userId, String role, Long expiredMs) {
+    public String createJwt(Long userId, String role, Long expiredMs, Integer tokenVersion) {
+        String jti = UUID.randomUUID().toString();
 
-        return Jwts.builder()
+        io.jsonwebtoken.JwtBuilder builder = Jwts.builder()
                 .claim("userId", userId)
                 .claim("role", role)
+                .claim("jti", jti)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
-                .signWith(secretKey)
+                .expiration(new Date(System.currentTimeMillis() + expiredMs));
+
+        if (tokenVersion != null) {
+            builder.claim("ver", tokenVersion);
+        }
+
+        return builder.signWith(secretKey)
                 .compact();
+    }
+
+    public String createJwt(Long userId, String role, Long expiredMs) {
+        return createJwt(userId, role, expiredMs, null);
     }
 
     public Long parseUserId(String token) {
@@ -37,9 +49,17 @@ public class JWTUtil {
                 .parseSignedClaims(token).getPayload().get("userId", Number.class).longValue();
     }
 
-    public String parseRole(String token) {
-        return Jwts.parser().verifyWith(secretKey).build()
-                .parseSignedClaims(token).getPayload().get("role", String.class);
+    public Integer parseTokenVersion(String token) {
+        Object verObj = Jwts.parser().verifyWith(secretKey).build()
+                .parseSignedClaims(token).getPayload().get("ver");
+        if (verObj == null) return null;
+        if (verObj instanceof Integer) return (Integer) verObj;
+        if (verObj instanceof Number) return ((Number) verObj).intValue();
+        try {
+            return Integer.parseInt(verObj.toString());
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

@@ -34,4 +34,7 @@ public class User {
     @Column(unique = true)
     private String phone;
 
+    @Column(nullable = false)
+    private Integer tokenVersion = 0;
+
 }

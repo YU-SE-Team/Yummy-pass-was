@@ -10,6 +10,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.CustomOAuth2UserDTO;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.jwt.JWTService;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 
 import java.io.IOException;
 
@@ -17,9 +19,11 @@ import java.io.IOException;
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JWTService jwtService;
+    private final UserRepository userRepository;
 
-    public CustomSuccessHandler(JWTService jwtService) {
+    public CustomSuccessHandler(JWTService jwtService, UserRepository userRepository) {
         this.jwtService = jwtService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -34,7 +38,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .map(a -> a.startsWith("ROLE_") ? a.substring(5) : a)
                 .orElse(null);
 
-        String token = jwtService.createToken(userId, roleName);
+        User user = userRepository.findById(userId).orElse(null);
+        Integer tokenVersion = (user == null || user.getTokenVersion() == null) ? 0 : user.getTokenVersion();
+
+        String token = jwtService.createToken(userId, roleName, tokenVersion);
         Cookie cookie = new Cookie("Authorization", token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");

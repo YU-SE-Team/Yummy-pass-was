@@ -31,39 +31,113 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        Cookie[] cookies = request.getCookies();
-        String authToken = null;
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("Authorization".equals(cookie.getName())) {
-                    authToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        if (authToken == null || authToken.isBlank()) {
+        // 우선 Authorization 헤더 확인 (클라이언트가 헤더 기반 인증을 사용하는 경우)
+        String path = request.getRequestURI();
+        // 공용 인증 엔드포인트는 필터에서 무시(로그인/회원가입 등)
+        if ("/api/auth/signin".equals(path) || "/api/auth/signup".equals(path) || "/api/auth/initial-setup".equals(path)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String tokenValue = authToken.replace("Bearer ", "");
+        String headerAuth = request.getHeader("Authorization");
+        boolean usingHeader = false;
+        String tokenValue = null;
+        if (headerAuth != null && !headerAuth.isBlank()) {
+            if (headerAuth.startsWith("Bearer ")) {
+                tokenValue = headerAuth.replace("Bearer ", "");
+            } else {
+                tokenValue = headerAuth;
+            }
+            usingHeader = true;
+        }
 
-        if (jwtService.isExpired(tokenValue)) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token has expired.");
+        // 헤더가 없으면 쿠키에서 확인
+        if (tokenValue == null || tokenValue.isBlank()) {
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("Authorization".equals(cookie.getName())) {
+                        tokenValue = cookie.getValue();
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (tokenValue == null || tokenValue.isBlank()) {
+            filterChain.doFilter(request, response);
             return;
         }
 
-        Long userId = jwtService.parseUserId(tokenValue);
+        // 토큰 만료 또는 파싱 오류 처리: 헤더 사용이면 401, 쿠키 사용이면 쿠키 삭제 후 익명으로 진행
+        try {
+            if (jwtService.isExpired(tokenValue)) {
+                if (usingHeader) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Token has expired.");
+                    return;
+                } else {
+                    clearAuthorizationCookie(response);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            if (usingHeader) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Invalid token.");
+                return;
+            } else {
+                clearAuthorizationCookie(response);
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
+
+        Long userId;
+        try {
+            userId = jwtService.parseUserId(tokenValue);
+        } catch (Exception e) {
+            if (usingHeader) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Invalid token.");
+                return;
+            } else {
+                clearAuthorizationCookie(response);
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
 
         User user = userRepository.findById(userId)
                 .orElse(null);
 
         if (user == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("User not found.");
-            return;
+            if (usingHeader) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("User not found.");
+                return;
+            } else {
+                clearAuthorizationCookie(response);
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
+
+        // tokenVersion 기반 무효화 검사
+        Integer tokenVerFromToken = jwtService.parseTokenVersion(tokenValue);
+        int tokenVerProvided = (tokenVerFromToken == null) ? 0 : tokenVerFromToken;
+        int currentTokenVer = (user.getTokenVersion() == null) ? 0 : user.getTokenVersion();
+        if (tokenVerProvided != currentTokenVer) {
+            if (usingHeader) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token has been revoked.");
+                return;
+            } else {
+                clearAuthorizationCookie(response);
+                filterChain.doFilter(request, response);
+                return;
+            }
         }
 
         UserDTO userDTO = new UserDTO();
@@ -85,12 +159,23 @@ public class JWTFilter extends OncePerRequestFilter {
                 new UsernamePasswordAuthenticationToken(userDTO, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Cookie cookie = new Cookie("Authorization", authToken);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(60 * 60 * 60);
-        response.addCookie(cookie);
+        // 쿠키 재설정(유효기간 연장) — 쿠키 기반 인증일 때만 갱신
+        if (!usingHeader) {
+            Cookie cookie = new Cookie("Authorization", tokenValue);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge(60 * 60 * 24); // 24h
+            response.addCookie(cookie);
+        }
 
         filterChain.doFilter(request, response);
+    }
+
+    private void clearAuthorizationCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("Authorization", "");
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 }
