@@ -3,7 +3,7 @@ package yuseteam.mealticketsystemwas.domain.ticket.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import yuseteam.mealticketsystemwas.domain.ticket.dto.TicketResponse;
+import yuseteam.mealticketsystemwas.domain.ticket.dto.TicketResDTO;
 import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 import yuseteam.mealticketsystemwas.domain.ticket.repository.TicketRepository;
 
@@ -17,26 +17,26 @@ public class TicketService {
     private final TicketRepository ticketRepository;
 
     @Transactional(readOnly = true)
-    public List<TicketResponse> getExpiredTickets(){
+    public List<TicketResDTO> getExpiredTickets(){
         LocalDateTime expiredTime = LocalDateTime.now().minusDays(1);
         List<Ticket> expiredTickets = ticketRepository.findByIsUsedFalseAndPurchaseTimeBefore(expiredTime);
 
         return expiredTickets.stream()
-                .map(TicketResponse::fromEntity)
+                .map(TicketResDTO::fromEntity)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<TicketResponse> getUnusedTickets() {
+    public List<TicketResDTO> getUnusedTickets() {
         List<Ticket> unusedTickets = ticketRepository.findByIsUsedFalse();
 
         return unusedTickets.stream()
-                .map(TicketResponse::fromEntity)
+                .map(TicketResDTO::fromEntity)
                 .toList();
     }
 
     @Transactional
-    public TicketResponse completeReceive(Long ticketId){
+    public TicketResDTO completeReceive(Long ticketId){
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(()->new IllegalArgumentException("식권을 찾을 수 없습니다."));
 
@@ -50,7 +50,7 @@ public class TicketService {
 
         ticket.completeReceive();
         Ticket saved = ticketRepository.save(ticket);
-        return TicketResponse.fromEntity(saved);
+        return TicketResDTO.fromEntity(saved);
     }
 
 }

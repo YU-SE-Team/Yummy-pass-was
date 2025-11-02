@@ -1,6 +1,6 @@
 package yuseteam.mealticketsystemwas.domain.oauthjwt.dto;
 
-public interface OAuth2Response {
+public interface OAuth2ResDTO {
 
     String getProvider();
     String getProviderId();

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class TicketResponse {
+public class TicketResDTO {
     private Long id;
     private String qrCode;
     private Boolean isUsed;
@@ -17,8 +17,8 @@ public class TicketResponse {
     private String userName;
     private String menuName;
 
-    public static TicketResponse fromEntity(Ticket ticket) {
-        return TicketResponse.builder()
+    public static TicketResDTO fromEntity(Ticket ticket) {
+        return TicketResDTO.builder()
                 .id(ticket.getId())
                 .qrCode(ticket.getQrCode())
                 .isUsed(ticket.getIsUsed())

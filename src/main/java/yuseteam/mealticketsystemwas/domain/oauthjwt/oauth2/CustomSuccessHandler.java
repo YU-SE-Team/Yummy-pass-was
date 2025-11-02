@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.CustomOAuth2User;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.CustomOAuth2UserDTO;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.jwt.JWTService;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        CustomOAuth2User principal = (CustomOAuth2User) authentication.getPrincipal();
+        CustomOAuth2UserDTO principal = (CustomOAuth2UserDTO) authentication.getPrincipal();
 
         Long userId = principal.getId();
         String roleName = principal.getAuthorities().stream()

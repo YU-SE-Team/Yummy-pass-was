@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.InitialSetupReqDTO;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.service.AuthInitialSetupService;
 
 import java.util.Map;
@@ -20,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthInitialSetupController {
 
-    private final AuthInitialSetupService service;
+    private final AuthInitialSetupService authInitialSetupService;
 
     @Operation(
             summary = "초기 설정: 역할 선택 + 전화번호 등록(한 번에 처리)",
@@ -63,17 +64,17 @@ public class AuthInitialSetupController {
                     required = true,
                     description = "역할/전화번호",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AuthInitialSetupService.InitialSetupRequest.class),
+                            schema = @Schema(implementation = InitialSetupReqDTO.class),
                             examples = {
                                     @ExampleObject(name = "STUDENT", value = "{ \"role\":\"STUDENT\", \"phone\":\"01012345678\" }"),
                                     @ExampleObject(name = "ADMIN", value = "{ \"role\":\"ADMIN\", \"phone\":\"01099998888\" }")
                             })
             )
-            @RequestBody AuthInitialSetupService.InitialSetupRequest body,
+            @RequestBody InitialSetupReqDTO body,
             HttpServletRequest request,
             HttpServletResponse response) {
 
-        Map<String, Object> result = service.initialSetup(body, request, response);
+        Map<String, Object> result = authInitialSetupService.initialSetup(body, request, response);
         int status = (int) result.getOrDefault("status", 200);
         result.remove("status");
         return ResponseEntity.status(status).body(result);

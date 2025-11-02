@@ -27,6 +27,7 @@ public class Ticket {
 
     private LocalDateTime receivedTime;
 
+    @Getter
     private LocalDateTime usedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,7 +56,5 @@ public class Ticket {
     public void completeReceive(){
         this.receivedTime = LocalDateTime.now();
     }
-
-    public LocalDateTime getUsedTime() { return this.usedTime; }
 
 }

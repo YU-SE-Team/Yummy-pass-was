@@ -2,11 +2,11 @@ package yuseteam.mealticketsystemwas.domain.oauthjwt.dto;
 
 import java.util.Map;
 
-public class KakaoResponse implements OAuth2Response {
+public class KakaoResDTO implements OAuth2ResDTO {
 
     private final Map<String, Object> attribute;
 
-    public KakaoResponse(Map<String, Object> attribute) {
+    public KakaoResDTO(Map<String, Object> attribute) {
         this.attribute = attribute;
     }
 

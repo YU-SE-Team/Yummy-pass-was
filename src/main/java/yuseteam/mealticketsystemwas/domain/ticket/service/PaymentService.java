@@ -9,7 +9,7 @@ import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateResponse;
 import yuseteam.mealticketsystemwas.domain.qr.service.QrService;
-import yuseteam.mealticketsystemwas.domain.ticket.dto.PaymentRes;
+import yuseteam.mealticketsystemwas.domain.ticket.dto.PaymentResDTO;
 import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 import yuseteam.mealticketsystemwas.domain.ticket.repository.TicketRepository;
 
@@ -24,7 +24,7 @@ public class PaymentService {
     private final QrService qrService;
 
     @Transactional
-    public PaymentRes payment(Long userId, Long menuId) {
+    public PaymentResDTO payment(Long userId, Long menuId) {
         //1. 유저, 메뉴 정보 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -55,6 +55,6 @@ public class PaymentService {
         ticketRepository.save(newTicket);
 
         //7. 결과 DTO로 변환하여 반환
-        return PaymentRes.from(newTicket);
+        return PaymentResDTO.from(newTicket);
     }
 }

@@ -3,6 +3,6 @@ package yuseteam.mealticketsystemwas.domain.ticket.dto;
 import lombok.Getter;
 
 @Getter
-public class PaymentReq {
+public class PaymentReqDTO {
     private Long menuId;
 }

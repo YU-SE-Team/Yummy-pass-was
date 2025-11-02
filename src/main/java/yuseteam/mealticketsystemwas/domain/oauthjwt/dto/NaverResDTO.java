@@ -2,26 +2,27 @@ package yuseteam.mealticketsystemwas.domain.oauthjwt.dto;
 
 import java.util.Map;
 
-public class GoogleResponse implements OAuth2Response {
+public class NaverResDTO implements OAuth2ResDTO {
 
     private final Map<String, Object> attribute;
 
-    public GoogleResponse(Map<String, Object> attribute) {
-        this.attribute = attribute;
+    public NaverResDTO(Map<String, Object> attribute) {
+        this.attribute = (Map<String, Object>) attribute.get("response");
     }
 
     @Override
     public String getProvider() {
-        return "google";
+        return "naver";
     }
 
     @Override
     public String getProviderId() {
-        return attribute.get("sub").toString();
+        return attribute.get("id").toString();
     }
 
     @Override
     public String getName() {
         return attribute.get("name").toString();
     }
+
 }

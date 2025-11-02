@@ -28,16 +28,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         System.out.println(oAuth2User);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        OAuth2Response oAuth2Response = null;
+        OAuth2ResDTO oAuth2Response = null;
 
         if (registrationId.equals("naver")){
-            oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
+            oAuth2Response = new NaverResDTO(oAuth2User.getAttributes());
         }
         else if (registrationId.equals("google")){
-            oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
+            oAuth2Response = new GoogleResDTO(oAuth2User.getAttributes());
         }
         else if (registrationId.equals("kakao")){
-            oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
+            oAuth2Response = new KakaoResDTO(oAuth2User.getAttributes());
         }
         else {
             return null;
@@ -61,7 +61,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userDTO.setName(oAuth2Response.getName());
             userDTO.setRole(null);
 
-            return new CustomOAuth2User(userDTO);
+            return new CustomOAuth2UserDTO(userDTO);
         }
         else {
 
@@ -75,7 +75,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userDTO.setName(oAuth2Response.getName());
             userDTO.setRole(existData.getRole());
 
-            return new CustomOAuth2User(userDTO);
+            return new CustomOAuth2UserDTO(userDTO);
         }
 
     }
