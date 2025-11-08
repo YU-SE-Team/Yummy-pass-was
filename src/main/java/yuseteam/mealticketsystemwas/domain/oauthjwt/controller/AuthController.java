@@ -123,9 +123,13 @@ public class AuthController {
             content = @Content(mediaType = "application/json",
                 schema = @Schema(example = "\"로그아웃 성공\""))
         ),
+        @ApiResponse(responseCode = "401", description = "이미 파괴된 토큰",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(example = "\"Token has been revoked.\""))
+        ),
         @ApiResponse(responseCode = "400", description = "토큰 없음 또는 잘못된 토큰",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(example = "\"유효하지 않은 토큰입니다.\""))
+                schema = @Schema(example = "\"Invalid token.\""))
         )
     })
     @PostMapping("/logout")
