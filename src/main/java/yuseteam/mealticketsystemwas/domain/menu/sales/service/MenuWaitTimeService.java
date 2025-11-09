@@ -1,7 +1,6 @@
 package yuseteam.mealticketsystemwas.domain.menu.sales.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import yuseteam.mealticketsystemwas.domain.menu.sales.dto.MenuWaitTimeRes;
 import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
@@ -13,8 +12,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MenuWaitTimeService {
@@ -28,7 +27,7 @@ public class MenuWaitTimeService {
 
     public MenuWaitTimeRes getMenuWaitTime(Long menuId) {
         Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NoSuchElementException("메뉴를 찾을 수 없습니다."));
 
         LocalDateTime since = LocalDateTime.now().minusHours(RECENT_HOURS);
         List<Ticket> recentSamples = ticketRepository
@@ -37,7 +36,7 @@ public class MenuWaitTimeService {
                 .filter(t -> t.getUsedTime().isAfter(since))
                 .sorted(Comparator.comparing(Ticket::getReceivedTime).reversed())
                 .limit(MAX_SAMPLES)
-                .collect(Collectors.toList());
+                .toList();
 
         if (recentSamples.isEmpty()) {
             return new MenuWaitTimeRes(menu.getId(), menu.getName(), null);
@@ -54,7 +53,7 @@ public class MenuWaitTimeService {
                     }
                 })
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
 
         if (validDurations.isEmpty()) {
             return new MenuWaitTimeRes(menu.getId(), menu.getName(), null);
