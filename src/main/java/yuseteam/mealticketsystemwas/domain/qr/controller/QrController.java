@@ -29,52 +29,6 @@ public class QrController {
     private final QrService qrService;
 
     @Operation(
-            summary = "식권 QR 생성",
-            description = "식권용 QR 코드를 생성하여 S3에 PNG로 업로드하고, QR의 사용상태(초기값 false)를 저장합니다.\n\n**권한:** STUDENT",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "QR 생성/업로드 성공",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = QrCreateRes.class),
-                                    examples = {
-                                            @ExampleObject(
-                                                    name = "성공 예시",
-                                                    value = "{\"uuid\":\"8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a\",\"imageUrl\":\"https://your-bucket.s3.ap-northeast-2.amazonaws.com/qr-images/8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a.png\"}"
-                                            )
-                                    }
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "서버 오류(예: S3 업로드 실패)",
-                            content = @Content(
-                                    mediaType = MediaType.TEXT_PLAIN_VALUE,
-                                    schema = @Schema(implementation = String.class),
-                                    examples = {
-                                            @ExampleObject(
-                                                    name = "실패 예시",
-                                                    value = "QR 생성/업로드 실패: The bucket is in this region: us-east-1 ..."
-                                            )
-                                    }
-                            )
-                    )
-            }
-    )
-    @PostMapping()
-    @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<QrCreateRes> createMealTicketQr() {
-        try {
-            QrCreateRes res = qrService.createAndUploadQr();
-            return ResponseEntity.ok(res);
-        } catch (Exception e) {
-            log.error("QR 생성 실패", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    @Operation(
             summary = "QR 사용",
             description = "QR을 사용 처리하고(상태를 true로 갱신), 해당 QR 이미지 파일을 S3에서 삭제합니다.\n\n**권한:** STUDENT",
             responses = {
