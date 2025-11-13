@@ -43,7 +43,7 @@ jobs:
           echo "Using image name: $USER/$REPO"
 
           # 이미지 빌드 (docker-compose 기반)
-          docker-compose -f docker-compose.yml build
+          docker compose -f docker-compose.yml build
 
           # 태그 지정
           docker tag $REPO:latest $USER/$REPO:${{ github.sha }}
