@@ -45,13 +45,8 @@ public class AdminMenuController {
                     content = @Content(mediaType = "text/plain")
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "식당 ID를 찾을 수 없음",
-                    content = @Content(mediaType = "text/plain")
-            ),
-            @ApiResponse(
                     responseCode = "500",
-                    description = "서버 내부 오류 (파일 업로드 실패, DB 오류 등)",
+                    description = "서버 내부 오류 (파일 업로드 실패, DB 오류, 식당 ID가 존재하지 않는 경우 등)",
                     content = @Content(mediaType = "text/plain")
             )
     })
