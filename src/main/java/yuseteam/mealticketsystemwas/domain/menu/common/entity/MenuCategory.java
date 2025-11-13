@@ -8,14 +8,16 @@ import java.util.List;
 @Getter
 public enum MenuCategory {
 
-    PORK("돈가스", "학생회관", 1),
-    SPECIAL("스페셜", "학생회관", 2),
-    KOREAN("한식", "학생회관", 3),
+    PORK("돈가스", "중앙도서관", 1),
+    SPECIAL("스페셜", "중앙도서관", 2),
+    KOREAN("한식", "중앙도서관", 3),
 
-    A("A", "자연계", 4),
-    C1("C1", "자연계", 5),
-    C2("C2", "자연계", 6),
-    D("D", "자연계", 7);
+    A("A", "이과대학", 4),
+    C1("C1", "이과대학", 5),
+    C2("C2", "이과대학", 6),
+    D("D", "이과대학", 7),
+
+    SET("정식", "교직원", 8);
 
     private final String category;
     private final String restaurant;

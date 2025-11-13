@@ -15,7 +15,6 @@ import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateRes;
 import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuRes;
 import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateReq;
 import yuseteam.mealticketsystemwas.domain.menu.admin.service.AdminMenuService;
-import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
 
 import java.util.List;
 
@@ -25,7 +24,6 @@ import java.util.List;
 @Tag(name = "Admin Menu", description = "관리자 메뉴 관리 API")
 public class AdminMenuController {
     private final AdminMenuService menuService;
-    private final RestaurantRepository restaurantRepository;
 
     //메뉴 등록
     @PostMapping("/menu")
@@ -125,9 +123,14 @@ public class AdminMenuController {
     //식당별 카테고리 목록
     @GetMapping("/menu/categories/{restaurantId}")
     @Operation(
-            summary = "식당별 카테고리 목록 조회",
-            description = "관리자가 특정 식당의 메뉴 카테고리 목록을 조회합니다.\n\n" +
-                    "예: [\"KOREAN\", \"SPECIAL\", \"PORK\", ...]"
+            summary = "레스토랑별 카테고리 메뉴 목록 조회",
+            description = """
+                    특정 레스토랑의 특정 카테고리에 해당하는 메뉴 목록을 조회합니다.
+                    **카테고리 구분**
+                    - 중앙도서관: `PORK`, `SPECIAL`, `KOREAN`
+                    - 학생회관: `A`, `C1`, `C2`, `D`
+                    - 교직원: `SET`
+                    """
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json")),
