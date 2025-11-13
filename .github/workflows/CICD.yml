@@ -44,14 +44,14 @@ jobs:
 
           # 이미지 빌드 (docker-compose 기반)
           docker compose -f docker-compose.yml build
-          docker images
+#          docker images
 
 #           태그 지정
 #          docker tag local/$REPO:latest $USER/$REPO:${{ github.sha }}
           docker tag local/$REPO:latest $USER/$REPO:latest
 
           # 푸시
-#          docker push $USER/$REPO:${{ github.sha }}
+#          docker push $USER/$REPO:
           docker push $USER/$REPO:latest
 
       ### 6️⃣ EC2 배포
