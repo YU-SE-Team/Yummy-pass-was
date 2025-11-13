@@ -2,7 +2,7 @@
 services:
   app:
     container_name: spring-boot-app
-    image: ${DOCKER_IMAGE:-${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:latest}
+    image: chamingyeong/yummypass
     build:
       context: .
       dockerfile: Dockerfile
