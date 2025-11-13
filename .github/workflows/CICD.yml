@@ -48,11 +48,11 @@ jobs:
 
 #           태그 지정
 #          docker tag local/$REPO:latest $USER/$REPO:${{ github.sha }}
-          docker tag local/$REPO:latest $USER/$REPO:latest
+#          docker tag local/$REPO:latest $USER/$REPO:latest
 
           # 푸시
 #          docker push $USER/$REPO:
-          docker push $USER/$REPO:latest
+          docker compose push
 
       ### 6️⃣ EC2 배포
       - name: Deploy to EC2 via docker-compose
