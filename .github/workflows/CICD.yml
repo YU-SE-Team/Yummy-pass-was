@@ -46,40 +46,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-
-      - name: Debug Secrets
-        run: |
-          echo "USERNAME length: ${#USERNAME}"
-          echo "REPO length: ${#REPO}"
-        env:
-          USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          REPO: ${{ secrets.DOCKERHUB_REPOSITORY }}
-        
       ###  Docker 이미지 빌드 및 푸시
       - name: Build and push Docker image
         run: |
-          echo "=== Checking DockerHub Secrets ==="
-          echo "USERNAME: '${{ secrets.DOCKERHUB_USERNAME }}'"
-          echo "REPOSITORY: '${{ secrets.DOCKERHUB_REPOSITORY }}'"
+          docker build ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }} -f ./Dockerfile .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
 
-          USER=$(echo "${{ secrets.DOCKERHUB_USERNAME }}" | tr -d '[:space:]')
-          REPO=$(echo "${{ secrets.DOCKERHUB_REPOSITORY }}" | tr -d '[:space:]')
-
-          echo "Using repository -> $USER/$REPO"
-
-          docker build -t $USER/$REPO:${{ github.sha }} -f ./Dockerfile .
-          docker push $USER/$REPO:${{ github.sha }}
-
-          docker tag $USER/$REPO:${{ github.sha }} $USER/$REPO:latest
-          docker push $USER/$REPO:latest
-#      - name: Build and push Docker image
-#        run: |
-#          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest -f ./Dockerfile .
-#          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
-#
-#          docker tag  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest \
-#                  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
-#          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
+          docker tag  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest \
+                  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
 
       ###  EC2 배포
       - name: Deploy to EC2
