@@ -55,7 +55,7 @@ public class Menu {
             this.totalQuantity = req.getTotalCount();
         }
         if (req.getCategory() != null) {
-            this.category = MenuCategory.valueOf(req.getCategory());
+            this.category = req.getCategory();
         }
         if (req.getVisible() != null) {
             this.visible = req.getVisible();
