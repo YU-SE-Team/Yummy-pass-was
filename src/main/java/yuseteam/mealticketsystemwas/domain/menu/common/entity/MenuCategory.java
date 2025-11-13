@@ -1,11 +1,13 @@
 package yuseteam.mealticketsystemwas.domain.menu.common.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Getter
+@Schema(description = "메뉴 카테고리")
 public enum MenuCategory {
 
     PORK("돈가스", "중앙도서관", 1),

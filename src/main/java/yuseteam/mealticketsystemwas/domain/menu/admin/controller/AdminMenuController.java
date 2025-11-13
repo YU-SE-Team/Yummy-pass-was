@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateReq;
@@ -15,8 +16,8 @@ import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateRes;
 import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuRes;
 import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateReq;
 import yuseteam.mealticketsystemwas.domain.menu.admin.service.AdminMenuService;
-
 import java.util.List;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,11 +27,12 @@ public class AdminMenuController {
     private final AdminMenuService menuService;
 
     //메뉴 등록
-    @PostMapping("/menu")
+    @PostMapping(value = "/menu", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "새 메뉴 등록",
-            description = "관리자가 새로운 메뉴를 등록합니다.\n" +
-                    "요청 본문에는 메뉴 이름, 가격, 카테고리, 식당 ID, 이미지 파일 등을 포함합니다."
+            description = "관리자가 새로운 메뉴를 등록합니다." +
+                    "요청 본문에는 메뉴 이름, 가격, 카테고리, 식당 ID, 이미지 파일 등을 포함합니다.\n\n"+
+                    "이미지 파일 업로드 하지 않을 경우 Send empty value 체크 하지 않아야 합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -44,13 +46,8 @@ public class AdminMenuController {
                     content = @Content(mediaType = "text/plain")
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "식당 ID를 찾을 수 없음",
-                    content = @Content(mediaType = "text/plain")
-            ),
-            @ApiResponse(
                     responseCode = "500",
-                    description = "서버 내부 오류 (파일 업로드 실패, DB 오류 등)",
+                    description = "서버 내부 오류 (파일 업로드 실패, DB 오류, 식당 ID가 존재하지 않는 경우 등)",
                     content = @Content(mediaType = "text/plain")
             )
     })
@@ -61,6 +58,11 @@ public class AdminMenuController {
 
     //메뉴 삭제
     @DeleteMapping("/menu/{menuId}")
+    @Operation(
+            summary = "메뉴 삭제",
+            description = "관리자가 특정 메뉴를 삭제합니다.\n\n" +
+                    "메뉴 ID를 경로 변수로 전달하여 해당 메뉴를 삭제합니다."
+    )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "삭제 완료"),
             @ApiResponse(responseCode = "404", description = "해당 메뉴를 찾을 수 없음", content = @Content(mediaType = "text/plain"))
@@ -105,7 +107,7 @@ public class AdminMenuController {
     }
   
     //메뉴 수정
-    @PatchMapping("/menu/{menuId}")
+    @PatchMapping(value = "/menu/{menuId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "메뉴 수정",
             description = "관리자가 기존 메뉴의 정보를 수정합니다\n\n" +

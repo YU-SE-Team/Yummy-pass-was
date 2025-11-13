@@ -21,7 +21,11 @@ public class AdminMenuCreateReq {
     @NotBlank
     private String name;
 
-    @Schema(description = "메뉴 이미지 파일 (multipart/form-data 업로드용)")
+    @Schema(
+            description = "메뉴 이미지 파일 (multipart/form-data 업로드용)",
+            type = "string",
+            format = "binary"
+    )
     private MultipartFile image;
 
     @Schema(description = "메뉴 가격", example = "8000")
@@ -31,7 +35,7 @@ public class AdminMenuCreateReq {
     @Schema(description = "총 수량", example = "50")
     private Integer totalCount;
 
-    @Schema(description = "메뉴 카테고리", example = "KOREAN")
+    @Schema(description = "메뉴 카테고리", example = "KOREAN", implementation = MenuCategory.class)
     private MenuCategory category;
 
     @Schema(description = "메뉴 노출 여부", example = "true")
