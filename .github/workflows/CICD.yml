@@ -36,11 +36,11 @@ jobs:
 
       ### 5️⃣ Docker Compose로 이미지 빌드 및 푸시
       - name: Build and push via Docker Compose
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_REPOSITORY: ${{ secrets.DOCKERHUB_REPOSITORY }}
+#        env:
+#          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+#          DOCKERHUB_REPOSITORY: ${{ secrets.DOCKERHUB_REPOSITORY }}
         run: |
-          echo "✅ Using image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}"
+#          echo "✅ Using image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}"
 
           # Docker Compose 빌드 & 푸시
           docker compose -f docker-compose.yml build
@@ -81,9 +81,9 @@ jobs:
             EOL
 
             echo "Restarting container..."
-            docker compose --env-file .env down
-            docker compose --env-file .env up -d --build
+            sudo docker compose --env-file .env down
+            sudo docker compose --env-file .env up -d --build
 
             echo "Containers status:"
-            docker ps -a
+            sudo docker ps -a
             echo "==== DEPLOY COMPLETED SUCCESSFULLY ===="
