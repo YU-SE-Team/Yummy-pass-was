@@ -37,8 +37,8 @@ jobs:
       ### 5️⃣ Docker Compose로 이미지 빌드 및 푸시
       - name: Build and push via Docker Compose
         run: |
-          USER=$(echo "${{ secrets.DOCKERHUB_USERNAME }}" | tr -d '\n' | tr -d '\r' | xargs)
-          REPO=$(echo "${{ secrets.DOCKERHUB_REPOSITORY }}" | tr -d '\n' | tr -d '\r' | xargs | tr '[:upper:]' '[:lower:]')
+          USER=$(echo "${{ secrets.DOCKERHUB_USERNAME }}")
+          REPO=$(echo "${{ secrets.DOCKERHUB_REPOSITORY }}")
 
           echo "Using image name: $USER/$REPO"
 
