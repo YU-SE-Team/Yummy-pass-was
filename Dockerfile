@@ -1,15 +1,14 @@
-FROM openjdk:17 AS builder
+FROM eclipse-temurin:17 AS builder
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew
-RUN apk add --no-cache findutils
 RUN ./gradlew build -x test
 
-FROM openjdk:17
-RUN apk add --no-cache ca-certificates && update-ca-certificates
+FROM eclipse-temurin:17
+RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
 COPY build/libs/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app.jar"]
