@@ -47,8 +47,8 @@ jobs:
           docker images
 
           # 태그 지정
-          docker tag $REPO:latest $USER/$REPO:${{ github.sha }}
-          docker tag $REPO:latest $USER/$REPO:latest
+          docker tag local/$REPO:latest $USER/$REPO:${{ github.sha }}
+          docker tag local/$REPO:latest $USER/$REPO:latest
 
           # 푸시
           docker push $USER/$REPO:${{ github.sha }}
