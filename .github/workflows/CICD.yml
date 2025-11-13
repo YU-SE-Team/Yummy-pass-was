@@ -46,6 +46,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+
+      - name: Debug Secrets
+        run: |
+          echo "USERNAME length: ${#USERNAME}"
+          echo "REPO length: ${#REPO}"
+        env:
+          USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          REPO: ${{ secrets.DOCKERHUB_REPOSITORY }}
+        -
       ###  Docker 이미지 빌드 및 푸시
       - name: Build and push Docker image
         run: |
