@@ -42,8 +42,9 @@ jobs:
 
           echo "Using image name: $USER/$REPO"
 
-          # 이미지 빌드 (docker-compose 기반)
+#           이미지 빌드 (docker-compose 기반)
           docker compose -f docker-compose.yml build
+          docker compose -f docker-compose.yml push
 #          docker images
 
 #           태그 지정
@@ -52,7 +53,7 @@ jobs:
 
           # 푸시
 #          docker push $USER/$REPO:
-          docker compose push
+#          docker compose push
 
       ### 6️⃣ EC2 배포
       - name: Deploy to EC2 via docker-compose
