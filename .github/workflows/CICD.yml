@@ -74,4 +74,7 @@ jobs:
             
             echo "Containers status:"
             sudo docker ps -a
+            
+            docker image prune -f || true
+
             echo "==== DEPLOY COMPLETED SUCCESSFULLY ===="
