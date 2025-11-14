@@ -52,27 +52,27 @@ jobs:
 
             echo "Generating .env file..."
             cat > .env <<EOL
-DB_URL=${{ secrets.DB_URL }}
-DB_USERNAME=${{ secrets.DB_USERNAME }}
-DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}
-NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}
-KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}
-GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
-GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-SERVER_ACCESS_KEY=${{ secrets.SERVER_ACCESS_KEY }}
-SERVER_SECRET_KEY=${{ secrets.SERVER_SECRET_KEY }}
-S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
-EOL
+            DB_URL=${{ secrets.DB_URL }}
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}
+            NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}
+            KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            SERVER_ACCESS_KEY=${{ secrets.SERVER_ACCESS_KEY }}
+            SERVER_SECRET_KEY=${{ secrets.SERVER_SECRET_KEY }}
+            S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
+            EOL
   
-  # 4) 최신 이미지 pull 후 컨테이너 재시작
-  echo "Pulling latest image..."
-  sudo docker compose pull app
+          # 4) 최신 이미지 pull 후 컨테이너 재시작
+            echo "Pulling latest image..."
+            sudo docker compose pull app
   
-  echo "Restarting container..."
-  sudo docker compose down
-  sudo docker compose up -d
+            echo "Restarting container..."
+            sudo docker compose down
+            sudo docker compose up -d
   
-  echo "Containers status:"
-  sudo docker ps -a
-  echo "==== DEPLOY COMPLETED SUCCESSFULLY ===="
+            echo "Containers status:"
+            sudo docker ps -a
+            echo "==== DEPLOY COMPLETED SUCCESSFULLY ===="
