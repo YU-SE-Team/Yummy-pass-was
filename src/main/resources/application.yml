@@ -72,8 +72,8 @@ spring:
   cloud:
     aws:
       credentials:
-        access-key: ${SEVER_ACCESS_KEY}
-        secret-key: ${SEVER_SECRET_KEY}
+        access-key: ${SERVER_ACCESS_KEY}
+        secret-key: ${SERVER_SECRET_KEY}
       region:
         static: ap-northeast-2
       s3:
