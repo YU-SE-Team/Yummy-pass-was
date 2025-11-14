@@ -66,13 +66,12 @@ jobs:
             S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
             EOL
             
-            echo "Pulling latest image..."
-            sudo docker-compose pull app
-  
-            echo "Restarting container..."
-            sudo docker-compose down
-            sudo docker-compose up -d
-  
+            docker stop yummypass-container || true
+            docker rm yummypass-container || true
+      
+            docker pull chamingyeong/yummypass:latest
+            docker run -d -p 8080:8080 --name yummypass-container --env-file .env chamingyeong/yummypass:lastest
+            
             echo "Containers status:"
             sudo docker ps -a
             echo "==== DEPLOY COMPLETED SUCCESSFULLY ===="
