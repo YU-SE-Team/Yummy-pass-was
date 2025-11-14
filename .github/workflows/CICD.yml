@@ -48,7 +48,8 @@ jobs:
 
             cd ~/Yummy-pass-was || exit 1
 
-            git pull origin main || git pull origin develop || true
+            git fetch --all
+            git reset --hard origin/develop
 
             echo "Generating .env file..."
             cat > .env <<EOL
@@ -66,11 +67,11 @@ jobs:
             EOL
             
             echo "Pulling latest image..."
-            sudo docker compose pull app
+            sudo docker-compose pull app
   
             echo "Restarting container..."
-            sudo docker compose down
-            sudo docker compose up -d
+            sudo docker-compose down
+            sudo docker-compose up -d
   
             echo "Containers status:"
             sudo docker ps -a
