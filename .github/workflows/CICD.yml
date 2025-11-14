@@ -36,13 +36,7 @@ jobs:
 
       ### 5️⃣ Docker Compose로 이미지 빌드 및 푸시
       - name: Build and push via Docker Compose
-#        env:
-#          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-#          DOCKERHUB_REPOSITORY: ${{ secrets.DOCKERHUB_REPOSITORY }}
         run: |
-#          echo "✅ Using image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}"
-
-          # Docker Compose 빌드 & 푸시
           docker compose -f docker-compose.yml build
           docker compose -f docker-compose.yml push
 
@@ -58,13 +52,7 @@ jobs:
 
             cd ~/Yummy-pass-was || exit 1
 
-            echo "Pulling latest from develop branch..."
-            git fetch --all
-            git reset --hard origin/develop
-
-            docker rm -f yummypass-container || true
-            docker pull chamingyeong/yummypass
-            docker run -d -p 8080:8080 --name yummypass-container chamingyeong/yummypass
+            docker pull chamingyeong/yummypass:latest
 
             echo "Generating .env file..."
             cat > .env <<EOL
