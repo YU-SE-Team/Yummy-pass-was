@@ -63,7 +63,7 @@ jobs:
             git reset --hard origin/develop
 
             echo "Pulling latest image..."
-            docker compose pull
+            docker run -d -p 8080:8080 --name yummypass-container chamingyeong/yummypass
 
             echo "Generating .env file..."
             cat > .env <<EOL
