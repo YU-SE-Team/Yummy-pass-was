@@ -62,7 +62,8 @@ jobs:
             git fetch --all
             git reset --hard origin/develop
 
-            echo "Pulling latest image..."
+            docker rm -f yummypass-container || true
+            docker pull chamingyeong/yummypass
             docker run -d -p 8080:8080 --name yummypass-container chamingyeong/yummypass
 
             echo "Generating .env file..."
