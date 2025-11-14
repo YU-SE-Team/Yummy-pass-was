@@ -64,8 +64,7 @@ jobs:
             SERVER_SECRET_KEY=${{ secrets.SERVER_SECRET_KEY }}
             S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
             EOL
-  
-          # 4) 최신 이미지 pull 후 컨테이너 재시작
+            
             echo "Pulling latest image..."
             sudo docker compose pull app
   
