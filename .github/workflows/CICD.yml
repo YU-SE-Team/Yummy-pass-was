@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,11 +23,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      ### 3️⃣ Gradle 빌드
-      - name: Build with Gradle
-        run: ./gradlew clean build -x test
-
-      ### 4️⃣ Docker 로그인
+      ### 4️⃣ Docker Hub 로그인
       - name: Docker login
         uses: docker/login-action@v2
         with:
@@ -37,8 +33,8 @@ jobs:
       ### 5️⃣ Docker Compose로 이미지 빌드 및 푸시
       - name: Build and push via Docker Compose
         run: |
-          docker compose -f docker-compose.yml build
-          docker compose -f docker-compose.yml push
+          docker compose -f docker-compose.yml build app
+          docker compose -f docker-compose.yml push app
 
       ### 6️⃣ EC2 배포
       - name: Deploy to EC2 via docker-compose
@@ -52,27 +48,31 @@ jobs:
 
             cd ~/Yummy-pass-was || exit 1
 
-            docker pull chamingyeong/yummypass:latest
+            git pull origin main || git pull origin develop || true
 
             echo "Generating .env file..."
             cat > .env <<EOL
-            DB_URL=${{secrets.DB_URL}}
-            DB_USERNAME=${{secrets.DB_USERNAME}}
-            DB_PASSWORD=${{secrets.DB_PASSWORD}}
-            NAVER_CLIENT_ID=${{secrets.NAVER_CLIENT_ID}}
-            NAVER_CLIENT_SECRET=${{secrets.NAVER_CLIENT_SECRET}}
-            KAKAO_CLIENT_ID=${{secrets.KAKAO_CLIENT_ID}}
-            GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}
-            GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}}
-            SERVER_ACCESS_KEY=${{secrets.SERVER_ACCESS_KEY}}
-            SERVER_SECRET_KEY=${{secrets.SERVER_SECRET_KEY}}
-            S3_BUCKET_NAME=${{secrets.S3_BUCKET_NAME}}
-            EOL
-
-            echo "Restarting container..."
-            sudo docker compose --env-file .env down
-            sudo docker compose --env-file .env up -d --build
-
-            echo "Containers status:"
-            sudo docker ps -a
-            echo "==== DEPLOY COMPLETED SUCCESSFULLY ===="
+DB_URL=${{ secrets.DB_URL }}
+DB_USERNAME=${{ secrets.DB_USERNAME }}
+DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}
+NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}
+KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}
+GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+SERVER_ACCESS_KEY=${{ secrets.SERVER_ACCESS_KEY }}
+SERVER_SECRET_KEY=${{ secrets.SERVER_SECRET_KEY }}
+S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
+EOL
+  
+  # 4) 최신 이미지 pull 후 컨테이너 재시작
+  echo "Pulling latest image..."
+  sudo docker compose pull app
+  
+  echo "Restarting container..."
+  sudo docker compose down
+  sudo docker compose up -d
+  
+  echo "Containers status:"
+  sudo docker ps -a
+  echo "==== DEPLOY COMPLETED SUCCESSFULLY ===="
