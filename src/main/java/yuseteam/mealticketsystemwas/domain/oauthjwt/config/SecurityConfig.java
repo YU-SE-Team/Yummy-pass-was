@@ -55,9 +55,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
-        // 로그인이 필요한 요청이 들어왔을 때 기본적으로 뜨는 /login 페이지를 제거하고
-        // 대신 OAuth2 제공자 인증 시작 URL로 바로 리디렉트하도록 설정합니다.
-        // 여기서는 카카오를 기본 제공자로 지정하여 /oauth2/authorization/kakao 로 리디렉트합니다.
         final String defaultOAuth2LoginUrl = "/api/auth/signup";
 
         http
@@ -81,14 +78,11 @@ public class SecurityConfig {
                 }))
                 .addFilterBefore(new JWTFilter(jwtService, userRepository), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
-                        // 기본 /login 페이지 대신 바로 카카오 OAuth 인증으로 이동하도록 설정
-                        .loginPage(defaultOAuth2LoginUrl)
                         .userInfoEndpoint(userInfoEndpointConfig ->
                                 userInfoEndpointConfig.userService(customOAuth2UserService))
                         .successHandler(customSuccessHandler)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        //.requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/",
                                 "/swagger-resources/**",
                                 "/swagger-ui/**",
@@ -110,10 +104,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .csrf(AbstractHttpConfigurer::disable)
-                // 명시적으로 form login과 httpBasic을 비활성화하여 기본 로그인 폼이 제공되지 않도록 합니다.
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                // 인증이 필요한 요청이 왔을 때 OAuth2 인증 시작 URL로 리다이렉트하도록 설정
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(defaultOAuth2LoginUrl))
                 );
