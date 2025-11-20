@@ -44,9 +44,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = jwtService.createToken(userId, roleName, tokenVersion);
         Cookie cookie = new Cookie("Authorization", token);
         cookie.setHttpOnly(true);
+        cookie.setSecure(true); // HTTPS 환경에서만 전송 (배포 시 필수)
         cookie.setPath("/");
         cookie.setMaxAge(24 * 60 * 60);
         response.addCookie(cookie);
 
+        String redirectUrl = "https://yummy-test-ashy.vercel.app/initial-setup";
+        getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 }
