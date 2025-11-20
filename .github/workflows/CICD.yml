@@ -64,6 +64,7 @@ jobs:
             SERVER_ACCESS_KEY=${{ secrets.SERVER_ACCESS_KEY }}
             SERVER_SECRET_KEY=${{ secrets.SERVER_SECRET_KEY }}
             S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
+            HOST=${{ secrets.HOST }}
             EOL
             
             docker stop yummypass-container || true
