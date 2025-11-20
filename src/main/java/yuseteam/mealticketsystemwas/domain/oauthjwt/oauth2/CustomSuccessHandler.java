@@ -49,7 +49,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         cookie.setMaxAge(24 * 60 * 60);
         response.addCookie(cookie);
 
-        String redirectUrl = "https://yummy-test-ashy.vercel.app/initial-setup";
+        String redirectUrl = "https://yummy-test-ashy.vercel.app/social-signup-phone";
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 }
