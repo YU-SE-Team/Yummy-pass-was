@@ -55,7 +55,7 @@ public class SecurityConfig {
         final String defaultOAuth2LoginUrl = "/api/auth/signup";
 
         http
-                .cors(Customizer.withDefaults())
+                .cors(AbstractHttpConfigurer::disable)
 
                 .addFilterBefore(new JWTFilter(jwtService, userRepository), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
