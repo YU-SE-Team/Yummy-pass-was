@@ -15,6 +15,7 @@ import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -51,18 +52,13 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .maxAge(24 * 60 * 60)
                 .build();
         response.addHeader("Set-Cookie", responseCookie.toString());
-//
-//        response.addHeader("Set-Cookie", "Authorization=" + token);
-//
-//        response.sendRedirect("https://yummy-test-ashy.vercel.app/social-signup-phone");
-//
-//        Cookie cookie = new Cookie("Authorization", token);
-//        cookie.setHttpOnly(true);
-//        cookie.setSecure(true); // HTTPS 환경에서만 전송 (배포 시 필수)
-//        cookie.setPath("/");
-//        cookie.setMaxAge(24 * 60 * 60);
-//        response.addCookie(cookie);
-//
+
+        if (Objects.requireNonNull(user).getPhone() != null) {
+            String redirectUrl = "https://yummy-test-ashy.vercel.app/ticket-purchase";
+            getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+            return;
+        }
+
         String redirectUrl = "https://yummy-test-ashy.vercel.app/social-signup-phone";
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
