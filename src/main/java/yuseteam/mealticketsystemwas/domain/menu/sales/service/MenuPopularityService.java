@@ -23,13 +23,17 @@ public class MenuPopularityService {
     private final MenuSalesSnapshotrepository menuSalesSnapshotrepository;
 
     public PopularMenuListRes getMostPopularMenuByRestaurant(Long restaurantId) {
-
         List<Menu> getAllMenus = menuRepository.findByRestaurantIdAndVisibleTrue(restaurantId);
 
         if (getAllMenus.isEmpty()) {
-            throw new IllegalArgumentException("해당 레스토랑에 메뉴가 없습니다.");
+            log.info("레스토랑 [{}] 에 표시 가능한 메뉴가 없습니다.", restaurantId);
+            return new PopularMenuListRes(
+                    List.of(),
+                    0
+            );
         }
 
+        //20분 전 시간 계산
         LocalDateTime twentyMinutesAgo = LocalDateTime.now().minusMinutes(20);
 
         List<MenuSalesSnapshot> snapshots = menuSalesSnapshotrepository
