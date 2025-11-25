@@ -94,7 +94,8 @@ public class MenuSalesSnapshotController {
                     "**특징:**\n" +
                     "- 동일한 판매량을 가진 메뉴가 여러 개면 모두 반환됩니다.\n" +
                     "- 판매 데이터가 없는 메뉴는 0개로 간주됩니다.\n" +
-                    "- 모든 메뉴가 0개 판매된 경우, 모든 메뉴가 동점으로 반환됩니다.\n" +
+                    "- 모든 메뉴가 0개 판매되었거나 표시 가능한 메뉴가 없는 경우, 빈 리스트를 반환합니다.\n" +
+                    "- 숨겨진 메뉴(visible=false)는 자동으로 제외됩니다.\n" +
                     "- 매진된 상품은 판매량이 없어 자동으로 순위에서 제외됩니다."
     )
     @ApiResponses(value = {
@@ -102,11 +103,6 @@ public class MenuSalesSnapshotController {
                     responseCode = "200",
                     description = "조회 성공",
                     content = @Content(schema = @Schema(implementation = PopularMenuListRes.class))
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "해당 레스토랑에 메뉴가 없습니다.",
-                    content = @Content(mediaType = "text/plain")
             )
     })
     public ResponseEntity<PopularMenuListRes> getPopularMenus(@PathVariable Long restaurantId) {

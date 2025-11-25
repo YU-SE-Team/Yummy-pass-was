@@ -20,7 +20,7 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public List<MenuResponse> getMenuByRestaurantAndCategory(Long restaurantId, MenuCategory category) {
-        return menuRepository.findByRestaurantIdAndCategory(restaurantId, category).stream()
+        return menuRepository.findByRestaurantIdAndCategoryAndVisibleTrue(restaurantId, category).stream()
                 .map(MenuResponse::new)
                 .collect(Collectors.toList());
     }
