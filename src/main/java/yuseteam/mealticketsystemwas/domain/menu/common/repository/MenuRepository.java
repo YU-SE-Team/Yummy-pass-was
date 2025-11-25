@@ -12,9 +12,9 @@ import java.util.Optional;
 
 public interface MenuRepository extends JpaRepository<Menu,Long> {
 
-    List<Menu> findByRestaurantIdAndCategory(Long restaurantId, MenuCategory category);
+    List<Menu> findByRestaurantIdAndVisibleTrue(Long restaurantId);
 
-    List<Menu> findByRestaurantId(Long restaurantId);
+    List<Menu> findByRestaurantIdAndCategoryAndVisibleTrue(Long restaurantId, MenuCategory category);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select m from Menu m where m.id = :id")
