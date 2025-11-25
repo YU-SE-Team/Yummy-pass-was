@@ -25,7 +25,7 @@ public class MenuSalesSnapshotService {
 
     //crontab expression: 초, 분, 시, 일, 월, 요일
     //5분마다 실행 (매 시 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55분)
-    @Scheduled(cron = "0 */1 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     @Transactional
     public void recordMenuSalesSnapshot() {
         List<Menu> menus = menuRepository.findAll();
