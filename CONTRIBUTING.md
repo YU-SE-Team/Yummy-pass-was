@@ -1,4 +1,4 @@
-# 🤝 SW-nuclear-fusion 협업 가이드
+# 🤝 Yummy-Pass 협업 가이드
 
 ## 브랜치 전략
 - `master`: 최종 제출용
