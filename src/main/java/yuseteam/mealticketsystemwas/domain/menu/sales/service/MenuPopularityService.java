@@ -53,6 +53,15 @@ public class MenuPopularityService {
                 .max(Integer::compareTo)
                 .orElse(0);
 
+        //판매량이 0인 경우 빈 리스트 반환
+        if (maxSales == 0) {
+            log.info("레스토랑 [{}] 최근 20분 판매된 메뉴가 없습니다.", restaurantId);
+            return new PopularMenuListRes(
+                    List.of(),
+                    0
+            );
+        }
+
         //최대 판매량과 동일한 판매량을 가진 모든 메뉴 찾기
         List<String> popularMenuNames = getAllMenus.stream()
                 .filter(menu -> menuSalesMap.getOrDefault(menu.getId(), 0).equals(maxSales))
