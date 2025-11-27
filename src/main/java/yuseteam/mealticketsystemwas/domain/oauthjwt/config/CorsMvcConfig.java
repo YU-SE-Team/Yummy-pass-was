@@ -13,6 +13,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
         corsRegistry.addMapping("/**")
                 .allowedOrigins(
                         "http://localhost:3000",
+                        "https://yummy-test-ashy.vercel.app",
                         "https://www.yummypass.r-e.kr"
                 )
                 .allowedMethods("*")
