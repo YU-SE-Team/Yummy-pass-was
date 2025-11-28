@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateRes;
 import yuseteam.mealticketsystemwas.domain.qr.dto.QrInfoRes;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrUseRes;
 import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 import yuseteam.mealticketsystemwas.domain.ticket.repository.TicketRepository;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -46,6 +48,11 @@ public class QrService {
         } catch (Exception e) {
             throw new RuntimeException("QR 생성 또는 업로드에 실패했습니다.", e);
         }
+    }
+
+    public QrUseRes createQrUseRes(String uuid) {
+        Optional<Ticket> ticket = ticketRepository.findByQrCode(uuid);
+        return ticket.map(value -> new QrUseRes(value.getId(), "QR 사용 성공")).orElse(null);
     }
 
     @Transactional
