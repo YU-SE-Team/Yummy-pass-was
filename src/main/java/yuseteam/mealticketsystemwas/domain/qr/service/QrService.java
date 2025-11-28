@@ -7,9 +7,7 @@ import com.google.zxing.common.BitMatrix;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
-import yuseteam.mealticketsystemwas.config.SecurityUtil;
 import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateRes;
 import yuseteam.mealticketsystemwas.domain.qr.dto.QrInfoRes;
 import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
@@ -50,16 +48,8 @@ public class QrService {
         }
     }
 
-    public void validateStudentRole() {
-        String role = SecurityUtil.getCurrentUserRole();
-        if (!"ROLE_STUDENT".equals(role)) {
-            throw new AccessDeniedException("STUDENT 권한이 필요합니다.");
-        }
-    }
-
     @Transactional
     public Boolean useQr(String uuid) {
-        validateStudentRole();
 
         Ticket ticket = ticketRepository.findByQrCode(uuid).orElse(null);
         if (ticket == null) {
