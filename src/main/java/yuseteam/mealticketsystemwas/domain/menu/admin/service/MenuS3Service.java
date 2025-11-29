@@ -28,7 +28,7 @@ public class MenuS3Service {
         }
 
         String extension = getImageExtension(image);
-        String fileName = UUID.randomUUID() + "_" + menu.getName() + "_menu" + extension;
+        String fileName = "menu/" + UUID.randomUUID() + "_" + menu.getName() + "_menu" + extension;
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(image.getContentType());
@@ -46,14 +46,15 @@ public class MenuS3Service {
 
         return publicUrl;
     }
+
     private String getImageKey(String imageUrl) {
-        int lastSlash = imageUrl.lastIndexOf("/");
-        if (lastSlash == -1) {
-            // Optionally log a warning here if desired
-            return imageUrl;
+        int index = imageUrl.indexOf("menu/");
+        if (index != -1) {
+            return imageUrl.substring(index);
         }
-        return imageUrl.substring(lastSlash + 1);
+        return imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
     }
+
     private String getImageExtension(MultipartFile image) {
         String extension = "";
         String originalFilename = image.getOriginalFilename();
