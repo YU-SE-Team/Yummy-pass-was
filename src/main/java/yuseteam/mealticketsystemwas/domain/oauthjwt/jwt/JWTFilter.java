@@ -31,6 +31,12 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        // CORS preflight 요청(OPTIONS)은 JWT 검증 없이 통과
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 우선 Authorization 헤더 확인 (클라이언트가 헤더 기반 인증을 사용하는 경우)
         String path = request.getRequestURI();
         // 공용 인증 엔드포인트는 필터에서 무시(로그인/회원가입 등)
