@@ -34,7 +34,7 @@ public class TicketController {
                     ))
     })
     @GetMapping("/expired")
-    public ResponseEntity<List<TicketResDTO>> getExpiredTickets(){
+    public ResponseEntity<List<TicketResDTO>> getExpiredTickets() {
         List<TicketResDTO> expiredTickets = ticketService.getExpiredTickets();
         return ResponseEntity.ok(expiredTickets);
     }
@@ -77,9 +77,33 @@ public class TicketController {
                     ))
     })
     @PatchMapping("/{ticketId}/receive")
-    public ResponseEntity<TicketResDTO> completeReceive(@PathVariable Long ticketId){
+    public ResponseEntity<TicketResDTO> completeReceive(@PathVariable Long ticketId) {
         TicketResDTO updated = ticketService.completeReceive(ticketId);
         return ResponseEntity.ok(updated);
     }
 
+    @Operation(
+            summary = "사용된 티켓 조회",
+            description = "사용 처리된 티켓 리스트를 반환합니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "사용된 티켓 목록 반환",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TicketResDTO.class),
+                            examples = @ExampleObject(value = "[{\n" +
+                                    "  \"id\": 5,\n" +
+                                    "  \"qrCode\": \"TEST-QR-00\",\n" +
+                                    "  \"isUsed\": true,\n" +
+                                    "  \"purchaseTime\": \"2025-10-29T00:10:14\",\n" +
+                                    "  \"receivedTime\": 2025-10-29T00:13:01.005207,\n" +
+                                    "  \"userName\": \"홍길동\",\n" +
+                                    "  \"menuName\": \"돈까스\"\n" +
+                                    "}]")
+                    ))
+    })
+    @GetMapping("/used")
+    public ResponseEntity<List<TicketResDTO>> getUsedTickets() {
+        List<TicketResDTO> usedTickets = ticketService.getUsedTickets();
+        return ResponseEntity.ok(usedTickets);
+    }
 }
