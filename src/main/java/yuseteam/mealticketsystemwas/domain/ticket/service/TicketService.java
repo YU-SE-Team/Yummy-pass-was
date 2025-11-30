@@ -53,4 +53,12 @@ public class TicketService {
         return TicketResDTO.fromEntity(saved);
     }
 
+    @Transactional(readOnly = true)
+    public List<TicketResDTO> getUsedTickets() {
+        List<Ticket> usedTickets = ticketRepository.findByIsUsedTrue();
+
+        return usedTickets.stream()
+                .map(TicketResDTO::fromEntity)
+                .toList();
+    }
 }
