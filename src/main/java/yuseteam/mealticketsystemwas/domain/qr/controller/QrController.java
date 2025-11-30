@@ -69,7 +69,7 @@ public class QrController {
 
     @Operation(
         summary = "QR 정보 조회",
-        description = "uuid로 QR 이미지 URL과 사용 상태를 조회합니다.\n\n**권한:** ADMIN",
+        description = "uuid로 QR 이미지 URL과 사용 상태를 조회합니다.\n\n**권한:** ADMIN, STUDENT",
         responses = {
             @ApiResponse(
                 responseCode = "200",
@@ -94,7 +94,7 @@ public class QrController {
             )
         }
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
     @GetMapping("/info")
     public ResponseEntity<?> getQrInfo(@Parameter(description = "조회할 QR의 uuid", required = true, example = "8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a") @RequestParam String uuid) {
         QrInfoRes info = qrService.getQrInfo(uuid);
