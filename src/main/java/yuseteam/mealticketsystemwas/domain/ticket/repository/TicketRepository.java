@@ -12,7 +12,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     List<Ticket> findByUserIdAndIsUsedFalseAndPurchaseTimeBefore(Long userId, LocalDateTime expiredTime);
 
-    List<Ticket> findByUserIdAndIsUsedFalse(Long userId);
+    List<Ticket> findByUserIdAndIsUsedFalseAndPurchaseTimeAfter(
+            Long userId,
+            LocalDateTime time
+    );
 
     List<Ticket> findByOrderItemMenuIdAndUsedTimeIsNotNullAndReceivedTimeIsNotNull(Long menuId);
 

@@ -41,7 +41,12 @@ public class TicketService {
             return List.of();
         }
 
-        List<Ticket> unusedTickets = ticketRepository.findByUserIdAndIsUsedFalse(currentUserId);
+        LocalDateTime expiredLimit = LocalDateTime.now().minusDays(1);
+        List<Ticket> unusedTickets =
+                ticketRepository.findByUserIdAndIsUsedFalseAndPurchaseTimeAfter(
+                        currentUserId,
+                        expiredLimit
+                );
 
         return unusedTickets.stream()
                 .map(TicketResDTO::fromEntity)
@@ -80,4 +85,5 @@ public class TicketService {
                 .map(TicketResDTO::fromEntity)
                 .toList();
     }
+
 }
