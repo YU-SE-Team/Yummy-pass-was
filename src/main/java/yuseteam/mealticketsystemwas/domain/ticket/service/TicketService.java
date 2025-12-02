@@ -26,7 +26,7 @@ public class TicketService {
         }
 
         LocalDateTime expiredTime = LocalDateTime.now().minusDays(1);
-        List<Ticket> expiredTickets = ticketRepository.findByUserIdAndIsUsedFalseAndPurchaseTimeBefore(currentUserId, expiredTime);
+        List<Ticket> expiredTickets = ticketRepository.findByUserIdAndIsUsedFalseAndPurchaseTimeBeforeOrderByPurchaseTimeDesc(currentUserId, expiredTime);
 
         return expiredTickets.stream()
                 .map(TicketResDTO::fromEntity)
@@ -43,7 +43,7 @@ public class TicketService {
 
         LocalDateTime expiredLimit = LocalDateTime.now().minusDays(1);
         List<Ticket> unusedTickets =
-                ticketRepository.findByUserIdAndIsUsedFalseAndPurchaseTimeAfter(
+                ticketRepository.findByUserIdAndIsUsedFalseAndPurchaseTimeAfterOrderByPurchaseTimeDesc(
                         currentUserId,
                         expiredLimit
                 );
@@ -79,7 +79,7 @@ public class TicketService {
             return List.of();
         }
 
-        List<Ticket> usedTickets = ticketRepository.findByUserIdAndIsUsedTrue(currentUserId);
+        List<Ticket> usedTickets = ticketRepository.findByUserIdAndIsUsedTrueOrderByUsedTimeDesc(currentUserId);
 
         return usedTickets.stream()
                 .map(TicketResDTO::fromEntity)
