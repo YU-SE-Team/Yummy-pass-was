@@ -31,6 +31,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
+
+        System.out.println("[CustomSuccessHandler] onAuthenticationSuccess 호출됨");
+
+
         CustomOAuth2UserDTO principal = (CustomOAuth2UserDTO) authentication.getPrincipal();
 
         Long userId = principal.getId();
