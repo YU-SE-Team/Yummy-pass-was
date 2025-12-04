@@ -54,12 +54,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addHeader("Set-Cookie", responseCookie.toString());
 
         if (user != null && user.getPhone() != null) {
-            String redirectUrl = "https://yummy-test-ashy.vercel.app/ticket-purchase";
+            String redirectUrl = "https://www.yummypass.r-e.kr/ticket-purchase";
             getRedirectStrategy().sendRedirect(request, response, redirectUrl);
             return;
         }
 
-        String redirectUrl = "https://yummy-test-ashy.vercel.app/social-signup-phone";
+        String redirectUrl = "https://www.yummypass.r-e.kr/social-signup-phone";
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 }
