@@ -64,7 +64,6 @@ public class SecurityConfig {
                         .successHandler(customSuccessHandler)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/",
                                 "/swagger-resources/**",
                                 "/swagger-ui/**",
@@ -73,9 +72,14 @@ public class SecurityConfig {
                                 "/error",
                                 "/api/auth/signin",
                                 "/api/auth/signup",
-                                "/api/auth/initial-setup"
-                        ).permitAll()
-                        .requestMatchers("/api/admin/**","/api/qr/use").hasRole("ADMIN")
+                                "/api/menus/**",
+                                "/api/restaurants",
+                                "/api/orders/**",
+                                "/api/admin/**",
+                                "/api/auth/initial-setup",
+                                "/api/tickets/**"
+                        ).permitAll() //지금 임시로 열어두는것, 나중에 지우고 위에것으로 사용할 것.
+                        .requestMatchers("/api/qr/**").authenticated() // QR API는 인증 필요
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
