@@ -18,7 +18,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
                         "https://www.yummypass.r-e.kr",
                         "https://yummypass.n-e.kr"
                 )
-                .allowedMethods("*")
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .exposedHeaders("Set-Cookie", "Authorization");
