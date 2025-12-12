@@ -1,6 +1,7 @@
 package yuseteam.mealticketsystemwas.domain.oauthjwt.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +18,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(unique = true)
     private String userId;
 
+    @NotBlank
     private String userPW;
 
     private String name;
