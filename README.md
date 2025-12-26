@@ -22,6 +22,10 @@
 - develop: 통합 개발 브랜치
 - feat: 기능 개발 브랜치
 
+## 계정
+- 관리자 계정 : admin / 1234
+- 사용자 계정 : user1/ 1234
+
 ## 협업 가이드
 
 상세한 협업 규칙은 [CONTRIBUTING.md](./CONTRIBUTING.md)를 참고
